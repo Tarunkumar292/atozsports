@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+body {
+    background-color: #f2f2f2;
+    font-family: DM Sans;
+}
+
+.login-box {
+    background-color: #272727;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* padding: 30px; */
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+}
+
+.login-box h1 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 50px;
+    color: #fff;
+}
+
+.login-box .logo {
+    text-align: center;
+    width: 80px;
+}
+.line{
+    border-bottom: 5px solid #ffc107;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    width: 100%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 25px;
+}
+
+.button{
+    padding: 0px 10px;
+}
+
+.login-box .form-control {
+    background-color: #272727;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #333;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #ffcd39;
+}
+.login-box .form-group{
+    padding: 0px 15px;
+}
+
+.login-box .form-group input {
+    border-radius: 5px;
+}
