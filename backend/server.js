@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 // Import routes
 const userRouter = require('./userroutes');
+const newsRouter = require('./newsroutes')
+const categoryRouter = require('./categoryroutes')
 
 //database
 const db = require('./db')
@@ -15,6 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route setup
 app.use('/user', userRouter);
+app.use('/news', newsRouter);
+app.use('/category',categoryRouter)
 
 // Start the server
 app.listen(3000, () => {
