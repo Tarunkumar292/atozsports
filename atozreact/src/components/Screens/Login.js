@@ -18,18 +18,26 @@ const Login = () => {
         password: password,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            console.error('Error response:', text);
+            throw new Error('Failed to log in: ' + (text || 'Unknown error'));
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
           alert('Login successful!');
-          window.location.href = 'http://localhost:3000/category/allcategory';
+          // window.location.href = 'http://localhost:3000'; // Redirect after login
         } else {
-          alert('Login failed: ' + data.message);
+          alert('Login failed: ' + data.message); // Handle error message
         }
       })
       .catch((error) => {
         console.error('Error:', error);
-        alert('An error occurred: ' + error.message);
+        alert('An error occurred: ' + error.message); // Show error alert
       });
   };
 

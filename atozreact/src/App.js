@@ -1,14 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
-import Home from './components/Screens/Home';
 import React from 'react';
+import Login from './components/Screens/Login';
 
 function App() {
   return (
     <React.Fragment>
 
 
-      <Home/>
+      <Login/>
     </React.Fragment>
   );
 }
