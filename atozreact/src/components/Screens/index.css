@@ -1,0 +1,282 @@
+/***** Common Styles *****/
+body {
+    background-color: #f2f2f2;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.header {
+    padding: 0;
+    background-color: #272727;
+}
+
+.header .logo {
+    width: 100px;
+}
+
+.line1,
+.line {
+    border-bottom: 5px solid #ffc107;
+}
+
+.sidebar {
+    position: relative;
+    background-color: #272727;
+    color: white;
+}
+
+.sidebar-header {
+    background-color: #343333;
+}
+
+.sidebar-header img.user {
+    width: 60px;
+    border-radius: 50%;
+}
+
+.sidebar-menu {
+    background-color: #343333;
+    padding: 20px;
+}
+
+.sidebar .menu-item {
+    padding: 10px;
+}
+
+.sidebar .menu-item:hover {
+    cursor: pointer;
+    background-color: #494949;
+    color: #ffc107;
+}
+
+.card {
+    border: none;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: #ffc107;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar .logout-btn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #343333;
+}
+
+.sidebar .btn-logout {
+    background: #343333;
+    color: #FFFFFF;
+
+}
+
+/***** Table Styles *****/
+.table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+/***** Form Controls *****/
+.login-box .form-control {
+    background-color: #272727;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.category-add .form-control {
+    border: 1px solid #CED4DA;
+}
+
+.category-add div{
+    width: 45%;
+}
+
+.login-box .form-group label,
+.category-add label,
+.checkbox-group label {
+    margin-bottom: 10px;
+    color: #514F4F;
+    font-weight: 600;
+}
+.checkbox-group label{
+    margin: 0;
+}
+/***** Button Styles *****/
+.table-responsive .btn-edit {
+    border: none;
+    background: #B0D6FF;
+    padding: 5px 20px;
+    border-radius: 12px;
+}
+
+.table-responsive .btn-delete {
+    border: none;
+    background: #FDE4E9;
+    padding: 5px 20px;
+    border-radius: 12px;
+}
+
+.table-responsive .btn-active {
+    background: #DCFCE7;
+    border-radius: 23px;
+    color: #667085;
+}
+
+.table-responsive .btn-active::before {
+    content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #22C55E;
+    margin-right: 8px;
+}
+
+.card-header .btn-secondary {
+    background-color: #000;
+}
+
+/***** Login Styles *****/
+.login-box {
+    background-color: #272727;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+}
+
+#loginForm {
+    padding: 20px;
+}
+
+.login-box h1 {
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 50px;
+    color: #fff;
+}
+
+.login-box .logo {
+    text-align: center;
+    width: 80px;
+}
+
+/***** Dashboard Styles *****/
+.dashboard {
+    background-color: #f8f9fa;
+    padding-top: 20px;
+}
+
+.categoryselect .select,
+.categorysearch .search {
+    margin: 15px;
+    padding: 5px 10px;
+    border: 1px solid #C1C1C1;
+    border-radius: 12px;
+}
+
+/***** category styles *****/
+.category-page {
+    margin: 20px;
+}
+
+.category-add {
+    justify-content: space-between;
+    gap: 20px;
+    margin: 15px;
+}
+
+.category-page .form-check .form-input {
+    margin-left: 10px;
+    transform: scale(1.5);
+}
+
+.category-add .save-button {
+    border: none;
+    margin-top: 20px;
+    background-color: #000;
+}
+
+/***** edit category popup section *****/ 
+
+.editcategory-page{
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.category-edit{
+    padding: 20px;
+    border: 1px solid #9B9B9B;
+    border-radius: 12px;
+}
+
+.category-edit .category-add{
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    justify-content: normal;
+}
+.category-edit .category-add div{
+    width: 100%;
+}
+
+.category-edit .checkbox-group{
+    margin: 10px 0px;
+    flex-direction: column;
+}
+
+.category-edit .checkbox-group .form-label{
+    margin-left: 10px;
+}
+.category-edit .form-check {
+    padding: 0;
+}
+
+.category-edit .btn-update{
+    background: #272727;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+    margin: 10px 0px;
+
+}
+
+
+
+/***** Pagination Styles *****/
+.pagination {
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #272727;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background-color: #ffc107;
+}

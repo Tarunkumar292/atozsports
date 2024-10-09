@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Login.css'; 
+import './index.css'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,14 +30,14 @@ const Login = () => {
       .then((data) => {
         if (data.success) {
           alert('Login successful!');
-          // window.location.href = 'http://localhost:3000'; // Redirect after login
+          window.location.href = 'http://localhost:3001/dashboard'; 
         } else {
-          alert('Login failed: ' + data.message); // Handle error message
+          alert('Login failed: ' + data.message); 
         }
       })
       .catch((error) => {
         console.error('Error:', error);
-        alert('An error occurred: ' + error.message); // Show error alert
+        alert('An error occurred: ' + error.message); 
       });
   };
 
