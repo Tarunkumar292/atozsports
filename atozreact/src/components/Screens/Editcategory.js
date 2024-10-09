@@ -24,13 +24,13 @@ const Editcategory = () => {
                             type="text"
                         />
                     </div>
-                    <div>
+                    <div className='d-flex flex-column'>
                         <label htmlFor="status">Status</label>
-                        <input
-                            id="status"
-                            className="category-field form-control"
-                            type="text"
-                        />
+                        <select className='select'>
+                            <option value=''>Select Category</option>
+                            <option value='active'>Active</option>
+                            <option value='inactive'>Inactive</option>
+                        </select>
                     </div>
                 </div>
                 <div className="checkbox-group d-flex">

@@ -104,7 +104,7 @@ body {
     border: 1px solid #CED4DA;
 }
 
-.category-add div{
+.category-add div {
     width: 45%;
 }
 
@@ -115,9 +115,11 @@ body {
     color: #514F4F;
     font-weight: 600;
 }
-.checkbox-group label{
+
+.checkbox-group label {
     margin: 0;
 }
+
 /***** Button Styles *****/
 .table-responsive .btn-edit {
     border: none;
@@ -214,54 +216,67 @@ body {
     background-color: #000;
 }
 
-/***** edit category popup section *****/ 
+/***** edit category popup section *****/
 
-.editcategory-page{
+.editcategory-page {
     height: 100vh;
     justify-content: center;
     align-items: center;
 }
 
-
-.category-edit{
+.category-edit {
+    width: 40%;
     padding: 20px;
     border: 1px solid #9B9B9B;
     border-radius: 12px;
 }
 
-.category-edit .category-add{
+@media (max-width: 768px) {
+    .category-edit {
+        width: 60%;
+    }
+}
+
+.category-edit .category-add {
     flex-direction: column;
     gap: 10px;
     margin: 0;
     justify-content: normal;
 }
-.category-edit .category-add div{
+
+.category-edit .category-add div {
     width: 100%;
 }
 
-.category-edit .checkbox-group{
+.category-edit .checkbox-group {
     margin: 10px 0px;
     flex-direction: column;
 }
 
-.category-edit .checkbox-group .form-label{
+.category-edit .checkbox-group .form-label {
     margin-left: 10px;
 }
+
 .category-edit .form-check {
     padding: 0;
 }
 
-.category-edit .btn-update{
+.category-edit .btn-update {
     background: #272727;
     color: #fff;
     border: none;
     border-radius: 12px;
     width: 100%;
     margin: 10px 0px;
-
 }
 
-
+.category-edit .select {
+    background: #FFFFFF;
+    color: #fff;
+    border: 1px solid #CED4DA;
+    padding: .375rem .75rem;
+    border-radius: 9px;
+}
 
 /***** Pagination Styles *****/
 .pagination {
