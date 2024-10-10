@@ -21,7 +21,7 @@ body {
 
 .sidebar {
     position: relative;
-    height: 100vh;
+    height: calc(100vh - 110px);
     background-color: #272727;
     color: white;
 }
@@ -195,7 +195,6 @@ body {
 /***** Dashboard Styles *****/
 .dashboard {
     background-color: #f8f9fa;
-    padding-top: 20px;
 }
 
 .categoryselect .select,
@@ -216,6 +215,8 @@ body {
 .category-page .checkbox-group .form-check .form-input {
     border: 1px solid #CED4DA;
     transform: scale(2);
+    height: 8px;
+    width: 10px;
 }
 
 .category-page .checkbox-group .form-label {
