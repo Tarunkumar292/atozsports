@@ -2,7 +2,7 @@ function Footer() {
     return (
         <div>
             <footer className="footer">
-                Footer
+                ATOZSPORTS© 2023. All Rights Reserved
             </footer>
         </div>
     )

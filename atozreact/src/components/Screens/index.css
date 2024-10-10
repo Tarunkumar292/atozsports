@@ -11,6 +11,7 @@ body {
 
 .header .logo {
     width: 100px;
+    margin: 10px 50px;
 }
 
 .line1,
@@ -20,6 +21,7 @@ body {
 
 .sidebar {
     position: relative;
+    height: 100vh;
     background-color: #272727;
     color: white;
 }
@@ -40,6 +42,11 @@ body {
 
 .sidebar .menu-item {
     padding: 10px;
+}
+
+.sidebar .menu-item a {
+    text-decoration: none;
+    color: #FFFFFF;
 }
 
 .sidebar .menu-item:hover {
@@ -109,15 +116,16 @@ body {
 }
 
 .login-box .form-group label,
-.category-add label,
-.checkbox-group label {
+.category-add label {
     margin-bottom: 10px;
     color: #514F4F;
     font-weight: 600;
 }
 
-.checkbox-group label {
-    margin: 0;
+.checkbox-group .form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /***** Button Styles *****/
@@ -126,6 +134,7 @@ body {
     background: #B0D6FF;
     padding: 5px 20px;
     border-radius: 12px;
+    margin-bottom: 5px;
 }
 
 .table-responsive .btn-delete {
@@ -133,6 +142,7 @@ body {
     background: #FDE4E9;
     padding: 5px 20px;
     border-radius: 12px;
+    margin-bottom: 5px;
 }
 
 .table-responsive .btn-active {
@@ -151,8 +161,10 @@ body {
     margin-right: 8px;
 }
 
-.card-header .btn-secondary {
+.card-header .btn-addnews {
+    border: none;
     background-color: #000;
+    color: #ffff;
 }
 
 /***** Login Styles *****/
@@ -195,37 +207,39 @@ body {
 }
 
 /***** category styles *****/
-.category-page {
-    margin: 20px;
-}
-
 .category-add {
     justify-content: space-between;
     gap: 20px;
     margin: 15px;
 }
 
-.category-page .form-check .form-input {
-    margin-left: 10px;
-    transform: scale(1.5);
+.category-page .checkbox-group .form-check .form-input {
+    border: 1px solid #CED4DA;
+    transform: scale(2);
+}
+
+.category-page .checkbox-group .form-label {
+    margin-bottom: 0px;
 }
 
 .category-add .save-button {
     border: none;
-    margin-top: 20px;
+    margin-top: 35px;
     background-color: #000;
 }
 
 /***** edit category popup section *****/
 
 .editcategory-page {
-    height: 100vh;
     justify-content: center;
     align-items: center;
 }
 
 .category-edit {
-    width: 40%;
+    position: fixed;
+    top: 20%;
+    background: #ffff;
+    width: 30%;
     padding: 20px;
     border: 1px solid #9B9B9B;
     border-radius: 12px;
@@ -254,6 +268,7 @@ body {
 }
 
 .category-edit .checkbox-group .form-label {
+    margin-bottom: 0px;
     margin-left: 10px;
 }
 
@@ -293,4 +308,56 @@ body {
 
 .pagination a:hover {
     background-color: #ffc107;
+}
+
+/***** profile *****/
+.profile-add{
+    display: flex;
+    justify-content: space-between;
+}
+.profile-add div {
+    margin: 20px;
+    width: 45%;
+}
+
+.buttons{
+    margin: 15px;
+}
+
+.btn-updateprofile {
+    background: #272727;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.btn-updatepass {
+    background: #272727;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    width: 100%;
+    margin: 10px 0px;
+}
+
+/***** update password *****/
+.update-pass{
+    flex-direction: column;
+}
+
+.update-pass div{
+    margin-bottom: 10px;
+}
+
+
+/***** Footer *****/
+footer {
+    background-color: #272727;
+    color: #ffff;
+    text-align: center;
+    padding: 10px;
 }

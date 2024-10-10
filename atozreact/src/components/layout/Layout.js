@@ -9,7 +9,6 @@ return(
         <Header/>
         {children}
         <Footer/>
-       
     </React.Fragment>
 )
 }

@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Screens/Login';
 import Dashboard from './components/Screens/Dashboard';
 import Category from './components/Screens/Category';
-import Editcategory from './components/Screens/Editcategory'
+import Profile from './components/Screens/Profile';
 
 function App() {
   return (
@@ -15,8 +15,8 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/category" element={<Category />} />
-          <Route path="/editcategory" element={<Editcategory />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </React.Fragment>
