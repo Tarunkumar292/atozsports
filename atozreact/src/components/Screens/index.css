@@ -82,7 +82,7 @@ body {
 
 }
 
-.category{
+.category {
     align-items: center;
 }
 
@@ -208,7 +208,7 @@ body {
     border-radius: 12px;
 }
 
-.entries select{
+.entries select {
     margin: 0px 5px;
     border: 1px solid #C1C1C1;
     border-radius: 8px;
@@ -380,17 +380,28 @@ body {
     width: 45%;
 }
 
-.editor{
+.editor {
     margin: 30px;
     height: 30%;
 }
 
- .card .btn-save{
+.card .btn-save {
     border: none;
     background-color: #000;
     color: #ffff;
     margin: 0px 30px;
 }
+
+@media (max-width: 500px) {
+    .category {
+        flex-direction: column;
+    }
+
+    .category div {
+        flex-direction: column;
+    }
+}
+
 
 /***** Footer *****/
 footer {
