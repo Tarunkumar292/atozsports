@@ -29,7 +29,6 @@ const Login = () => {
       })
       .then((data) => {
         if (data.success) {
-          alert('Login successful!');
           window.location.href = 'http://localhost:3001/dashboard'; 
         } else {
           alert('Login failed: ' + data.message); 
