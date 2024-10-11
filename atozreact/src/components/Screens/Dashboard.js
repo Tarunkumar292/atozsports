@@ -51,21 +51,31 @@ const Dashboard = () => {
                         <div className="card">
                             <div className="card-header">
                                 <h2>All News</h2>
-                                <button className="btn btn-addnews ms-3">+ Add News</button>
+                                <Link to="/addnews"><button className="btn btn-addnews ms-3">+ Add News</button></Link>
                             </div>
-                            <div className='category d-flex justify-content-end px-1'>
-                                <div className="categoryselect mb-3">
-                                    <select className='select'>
-                                        <option value=''>Select Category</option>
-                                        {/* Dynamically add category options here */}
-                                    </select>
+                            <div className='category d-flex justify-content-between p-3'>
+                                <div className='entries'>
+                                    <span>Show</span><select>
+                                        <option value=''>5</option>
+                                        <option value=''>10</option>
+                                        <option value=''>15</option>
+                                        <option value=''>20</option>
+                                    </select><span>entries</span>
                                 </div>
-                                <div className="categorysearch mb-3">
-                                    <input
-                                        className='search'
-                                        type='text'
-                                        placeholder='Search'
-                                    />
+                                <div className='d-flex'>
+                                    <div className="categoryselect ">
+                                        <select className='select'>
+                                            <option value=''>Select Category</option>
+                                            {/* Dynamically add category options here */}
+                                        </select>
+                                    </div>
+                                    <div className="categorysearch ">
+                                        <input
+                                            className='search'
+                                            type='text'
+                                            placeholder='Search'
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div className="table-responsive">
@@ -77,7 +87,7 @@ const Dashboard = () => {
                                             <th>Category</th>
                                             <th>Image</th>
                                             <th>Date</th>
-                                            <th>Pin</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -88,7 +98,7 @@ const Dashboard = () => {
                                             <td>Shooting</td>
                                             <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
                                             <td>27-09-2024</td>
-                                            <td><i className="fas fa-thumbtack"></i></td>
+                                            <td>Trending</td>
                                             <td>
                                                 <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
                                                 <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
@@ -100,7 +110,7 @@ const Dashboard = () => {
                                             <td>Shooting</td>
                                             <td><img src="/assets/news2.png" alt="News 2" className="img-fluid" /></td>
                                             <td>27-09-2024</td>
-                                            <td><i className="fas fa-thumbtack"></i></td>
+                                            <td>Trending</td>
                                             <td>
                                                 <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
                                                 <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
@@ -112,7 +122,7 @@ const Dashboard = () => {
                                             <td>Shooting</td>
                                             <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
                                             <td>27-09-2024</td>
-                                            <td><i className="fas fa-thumbtack"></i></td>
+                                            <td>Trending</td>
                                             <td>
                                                 <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
                                                 <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
@@ -124,7 +134,7 @@ const Dashboard = () => {
                                             <td>Shooting</td>
                                             <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
                                             <td>27-09-2024</td>
-                                            <td><i className="fas fa-thumbtack"></i></td>
+                                            <td>Trending</td>
                                             <td>
                                                 <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
                                                 <button className="btn btn-delete btn-sm "><img src='/assets/delete.svg' alt='delete' /></button>
@@ -136,7 +146,7 @@ const Dashboard = () => {
                                             <td>Shooting</td>
                                             <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
                                             <td>27-09-2024</td>
-                                            <td><i className="fas fa-thumbtack"></i></td>
+                                            <td>Trending</td>
                                             <td>
                                                 <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
                                                 <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>

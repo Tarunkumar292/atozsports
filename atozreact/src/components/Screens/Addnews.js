@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
 
 const Addnews = () => {
+    const [editorContent, setEditorContent] = useState('');
+
+    const handleChange = (content) => {
+        setEditorContent(content);
+    };
 
     return (
         <Layout>
@@ -19,7 +26,7 @@ const Addnews = () => {
                         <div className="line1 p-0"></div>
                     </div>
                 </header>
-                <div div className="row">
+                <div className="row">
                     <nav className="col-md-3 col-lg-3 sidebar px-0">
                         <div className="sidebar-header text-center">
                             <img src="/assets/user.png" className="user my-3 img-fluid" alt="User Profile" />
@@ -50,7 +57,7 @@ const Addnews = () => {
                     <div className="col-md-9 col-lg-9 p-0">
                         <div className="card">
                             <div className="card-header">
-                                <h2><span></span>Add News</h2>
+                                <h2>Add News</h2>
                             </div>
                             <div className="news-add d-flex align-items-center">
                                 <div>
@@ -112,15 +119,21 @@ const Addnews = () => {
                                         <input className="form-input" type="checkbox" id="banner" />
                                     </div>
                                 </div>
-                                {/* <ReactRichEditor height={200} /> */}
                             </div>
+                                <div className='editor'>
+                                    <ReactQuill
+                                        value={editorContent}
+                                        onChange={handleChange}
+                                        theme="snow"
+                                    />
+                            </div>
+                            <button className='btn btn-save'>Save</button>
                         </div>
                     </div>
                 </div>
             </main>
         </Layout>
     );
-
 };
 
 export default Addnews;
