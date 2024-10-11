@@ -312,16 +312,17 @@ body {
 }
 
 /***** profile *****/
-.profile-add{
+.profile-add {
     display: flex;
     justify-content: space-between;
 }
+
 .profile-add div {
     margin: 20px;
     width: 45%;
 }
 
-.buttons{
+.buttons {
     margin: 15px;
 }
 
@@ -346,14 +347,29 @@ body {
 }
 
 /***** update password *****/
-.update-pass{
+.update-pass {
     flex-direction: column;
 }
 
-.update-pass div{
+.update-pass div {
     margin-bottom: 10px;
 }
 
+/***** all news *****/
+.news-add select {
+    padding: 6px;
+    border: 1px solid #CED4DA;
+    border-radius: 10px;
+}
+
+.news-add {
+    justify-content: space-around;
+    margin: 10px;
+}
+
+.news-add div {
+    width: 45%;
+}
 
 /***** Footer *****/
 footer {

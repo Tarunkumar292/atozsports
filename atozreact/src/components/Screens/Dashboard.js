@@ -13,7 +13,7 @@ const Dashboard = () => {
                     <div className='col-lg-12 header p-0'>
                         <img
                             src="/assets/logo.png"
-                            className="logo m-3 img-fluid"
+                            className="logo img-fluid"
                             alt="A TO Z Sports Logo"
                         />
                         <div className="line1 p-0"></div>

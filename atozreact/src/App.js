@@ -5,6 +5,7 @@ import Login from './components/Screens/Login';
 import Dashboard from './components/Screens/Dashboard';
 import Category from './components/Screens/Category';
 import Profile from './components/Screens/Profile';
+import Addnews from './components/Screens/Addnews';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/category" element={<Category />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path='/addnews' element={<Addnews/>}/>
         </Routes>
       </BrowserRouter>
     </React.Fragment>

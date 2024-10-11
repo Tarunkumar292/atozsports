@@ -11,10 +11,6 @@ const Profile = () => {
         setShowModal(true);
     };
 
-    const handlecloseModal = () =>{
-        setShowModal(false);
-    }
-
     return (
         <Layout>
             <main className="Profile-page container-fluid">
@@ -95,7 +91,6 @@ const Profile = () => {
                     <div className="editcategory-page d-flex">
                         <div className="category-edit ">
                             <h2>Update Password</h2>
-                            <p onClick={handlecloseModal}>x</p>
                             <div className="update-pass d-flex">
                                 <div>
                                     <label htmlFor="password">Current Password</label>
