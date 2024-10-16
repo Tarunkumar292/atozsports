@@ -1,16 +1,19 @@
-const Category = require('../categoryschema')
+const express = require('express');
+const Category = require('../modals/categoryschema')
 const bcrypt = require('bcrypt');
 
 // Add category
 const addcategory = async (req, res) => {
     try {
         const categoryData = req.body;
+        console.log(categoryData ,"categoryData");
+        
         const category = new Category(categoryData); 
 
         const savedcategory = await category.save();
-        res.status(201).json({ message: "category added successfully", savedcategory });
+        res.status(200).json({message:"category saved successfully", savedcategory});
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
             message: "Failed to add category", 
             error: error.message
         });

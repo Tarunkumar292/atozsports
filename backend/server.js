@@ -7,9 +7,9 @@ app.use(cors());
 
 
 // Import routes
-const userRouter = require('./userroutes');
-const newsRouter = require('./newsroutes')
-const categoryRouter = require('./categoryroutes')
+const userRouter = require('./routes/userroutes');
+const newsRouter = require('./routes/newsroutes')
+const categoryRouter = require('./routes/categoryroutes')
 
 //database
 const db = require('./db')

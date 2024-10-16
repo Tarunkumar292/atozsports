@@ -1,4 +1,4 @@
-const News = require("../newsschema");
+const News = require("../modals/newsschema");
 const bcrypt = require('bcrypt');
 
 // Add news
@@ -31,19 +31,18 @@ const getnews = async (req, res) => {
 const editnews = async (req, res) => {
     try {
         const { id } = req.params;
-        const news = req.body;
+        const newsUpdates = req.body; // Updated data
 
-        const updatedNews = await News.findByIdAndUpdate(id, news, { new: true });
+        const updatedNews = await News.findByIdAndUpdate(id, newsUpdates, { new: true });
         if (!updatedNews) {
             return res.status(404).json({ message: 'News not found' });
         }
         res.status(200).json({ message: "News updated successfully", updatedNews });
     } catch (err) {
-        console.log(err);
+        console.error(`Error updating news with id ${req.params.id}:`, err);
         res.status(400).json({ error: err.message });
     }
 }
-
 // Delete news
 const deletenews = async (req, res) => {
     try {

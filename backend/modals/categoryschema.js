@@ -9,18 +9,18 @@ const categoryschema = new mongoose.Schema({
     slug: {
         type: String,
         required: true
-        },
-    icon: {
-        type: String,   
-        required: true
     },
-    add_page:{
-        type:Boolean,
+    status:{
+        type: Boolean,
         default:false
     },
-    is_trending:{
-        type:Boolean,
-        default:false
+    add_page: {
+        type: Boolean,
+        default: false
+    },
+    is_trending: {
+        type: Boolean,
+        default: false
     }
 });
 categoryschema.pre('save', function (next) {

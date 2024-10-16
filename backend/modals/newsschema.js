@@ -4,11 +4,12 @@ const slugify = require('slugify');
 // Define the schema for news
 const newsschema = new mongoose.Schema({
     photo: {
-        type: String, 
+        type: String,
         required: true
     },
     category: {
-        type: String
+        type: String,
+        required: true
     },
     title: {
         type: String,
@@ -16,8 +17,7 @@ const newsschema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     date: {
         type: Date,
@@ -28,12 +28,19 @@ const newsschema = new mongoose.Schema({
         type: String,
         required: true
     },
-    newsdetails: {
-        type: String
+    // newsdetails: {
+    //     type: String
+    // },
+    is_trending: {
+        type: Boolean,
+        default: false
+    },
+    banner: {
+        type: Boolean,
+        default: false
     }
 });
 
-// Automatically generate the slug before saving the news document
 newsschema.pre('save', function (next) {
     if (this.isModified('title')) {
         this.slug = slugify(this.title, { lower: true, strict: true });
@@ -41,7 +48,6 @@ newsschema.pre('save', function (next) {
     next();
 });
 
-// Create the model
 const News = mongoose.model('News', newsschema);
 
 module.exports = News;

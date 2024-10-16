@@ -1,4 +1,4 @@
-const User = require("../userschema");
+const User = require("../modals/userschema");
 const bcrypt = require('bcrypt');
 
 // Signup route
