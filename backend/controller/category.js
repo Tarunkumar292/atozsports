@@ -6,19 +6,25 @@ const bcrypt = require('bcrypt');
 const addcategory = async (req, res) => {
     try {
         const categoryData = req.body;
-        console.log(categoryData ,"categoryData");
-        
-        const category = new Category(categoryData); 
+        console.log(categoryData, "categoryData");
 
-        const savedcategory = await category.save();
-        res.status(200).json({message:"category saved successfully", savedcategory});
+        const category = new Category(categoryData);
+
+        const savedCategory = await category.save();
+
+        res.status(201).json({
+            message: "Category saved successfully",
+            savedCategory,
+        });
     } catch (error) {
+        console.error("Error saving category:", error);
+
         res.status(500).json({
-            message: "Failed to add category", 
-            error: error.message
+            message: "Failed to add category",
+            error: error.message,
         });
     }
-}
+};
 
 // Get all category
 const getcategory = async (req, res) => {

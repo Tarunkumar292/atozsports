@@ -17,7 +17,6 @@ const newsschema = new mongoose.Schema({
     },
     slug: {
         type: String,
-        required: true
     },
     date: {
         type: Date,
@@ -28,9 +27,10 @@ const newsschema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // newsdetails: {
-    //     type: String
-    // },
+    newsdetails: {
+        type: String,
+        required:true
+    },
     is_trending: {
         type: Boolean,
         default: false
@@ -41,6 +41,7 @@ const newsschema = new mongoose.Schema({
     }
 });
 
+// Generate slug before saving
 newsschema.pre('save', function (next) {
     if (this.isModified('title')) {
         this.slug = slugify(this.title, { lower: true, strict: true });

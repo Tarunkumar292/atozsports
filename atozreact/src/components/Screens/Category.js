@@ -1,34 +1,124 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
+import axios from 'axios';
 
 const Category = () => {
     const [showModal, setShowModal] = useState(false);
+    const [categoryName, setCategoryName] = useState('');
+    const [slug, setSlug] = useState('');
+    const [status, setStatus] = useState(true);
+    const [addToHome, setAddToHome] = useState(false);
+    const [trending, setTrending] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [editingCategoryId, setEditingCategoryId] = useState(null);
 
-    const handleOpenModal = () => {
+    // Fetch all categories
+    const getData = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/category/allcategory');
+            setCategories(response.data.category);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    useEffect(() => {
+        const generatedSlug = categoryName.toLowerCase().replace(/\s+/g, '-');
+        setSlug(generatedSlug);
+    }, [categoryName]);
+
+    const handleOpenModal = (category) => {
+        setEditingCategoryId(category._id);
+        setCategoryName(category.category);
+        setSlug(category.slug);
+        setStatus(category.status);
+        setAddToHome(category.add_page);
+        setTrending(category.is_trending);
         setShowModal(true);
     };
 
-    const categories = [
-        { id: 1, name: 'State-wise distribution', status: 'Active' },
-        { id: 2, name: 'National news', status: 'Active' },
-        { id: 3, name: 'International news', status: 'Active' },
-        { id: 4, name: 'State-wise distribution', status: 'Active' },
-        { id: 5, name: 'State-wise distribution', status: 'Active' },
-    ];
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setCategoryName('');
+        setSlug('');
+        setStatus(true);
+        setAddToHome(false);
+        setTrending(false);
+    };
+
+    // Save new category
+    const handleSaveCategory = async (e) => {
+        e.preventDefault();
+        const categoryData = {
+            category: categoryName,
+            slug,
+            status,
+            add_page: addToHome,
+            is_trending: trending,
+        };
+
+        try {
+            const response = await axios.post('http://localhost:3000/category/add', categoryData);
+
+            if (response.status === 201) {
+                alert('Category added successfully!');
+                getData();
+            } else {
+                alert('Failed to add category: ' + response.data.message);
+            }
+        } catch (error) {
+            alert('Failed to add category: ' + (error.response?.data?.message || 'Unknown error'));
+        }
+    };
+
+
+    // Update category
+    const handleUpdateCategory = async (e) => {
+        e.preventDefault();
+        const updatedCategoryData = {
+            category: categoryName,
+            slug,
+            status,
+            add_page: addToHome,
+            is_trending: trending,
+        };
+        try {
+            const response = await axios.put(`http://localhost:3000/category/edit/${editingCategoryId}`, updatedCategoryData);
+            if (response.status === 200) {
+                handleCloseModal();
+                getData();
+            } else {
+                alert('Failed to update category');
+            }
+        } catch (error) {
+            console.error('Error updating category:', error);
+            alert('An error occurred while updating the category');
+        }
+    };
+
+    // Delete category
+    const deleteData = async (id) => {
+        try {
+            await axios.delete(`http://localhost:3000/category/delete/${id}`);
+            getData();
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
+    };
 
     return (
         <Layout>
             <main className="category-page container-fluid">
                 <header className="row">
                     <div className="col-lg-12 header p-0">
-                        <img
-                            src="/assets/logo.png"
-                            className="logo img-fluid"
-                            alt="A TO Z Sports Logo"
-                        />
+                        <img src="/assets/logo.png" className="logo img-fluid" alt="A TO Z Sports Logo" />
                         <div className="line1 p-0"></div>
                     </div>
                 </header>
@@ -41,12 +131,16 @@ const Category = () => {
                         <p className="text-center m-1">ADMINISTRATION</p>
                         <div className="sidebar-menu">
                             <div className="menu-item d-flex align-items-center">
-                                <Link to="/category"><img src="/assets/category.png" className="category" alt="category" />
-                                    <span className="ms-2">Category</span></Link>
+                                <Link to="/category">
+                                    <img src="/assets/category.png" className="category" alt="category" />
+                                    <span className="ms-2">Category</span>
+                                </Link>
                             </div>
                             <div className="menu-item d-flex align-items-center">
-                                <Link to="/dashboard"><img src="/assets/all-news.png" className="news" alt="news" />
-                                    <span className="ms-2">All News</span></Link>
+                                <Link to="/dashboard">
+                                    <img src="/assets/all-news.png" className="news" alt="news" />
+                                    <span className="ms-2">All News</span>
+                                </Link>
                             </div>
                             <div className="menu-item d-flex align-items-center">
                                 <Link to="/profile">
@@ -60,6 +154,7 @@ const Category = () => {
                             <button className='btn btn-logout'>Logout</button>
                         </div>
                     </nav>
+
                     <div className="col-md-9 col-lg-9 p-0">
                         <div className="card">
                             <div className="card-header">
@@ -72,6 +167,8 @@ const Category = () => {
                                         id="category-name"
                                         className="category-field form-control"
                                         type="text"
+                                        value={categoryName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
                                     />
                                 </div>
                                 <div>
@@ -80,18 +177,39 @@ const Category = () => {
                                         id="slug"
                                         className="category-field form-control"
                                         type="text"
+                                        value={slug}
+                                        onChange={(e) => setSlug(e.target.value)}
                                     />
                                 </div>
-                                <button className='save-button btn btn-secondary' type='submit'>Save</button>
+                                <button
+                                    className='save-button btn btn-secondary'
+                                    type='submit'
+                                    onClick={handleSaveCategory}
+                                >
+                                    Save
+                                </button>
                             </div>
+
                             <div className="checkbox-group d-flex align-items-center">
                                 <div className="form-check">
                                     <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
-                                    <input className="form-input" type="checkbox" id="add-to-home" />
+                                    <input
+                                        className="form-input"
+                                        type="checkbox"
+                                        id="add-to-home"
+                                        checked={addToHome}
+                                        onChange={(e) => setAddToHome(e.target.checked)}
+                                    />
                                 </div>
                                 <div className="form-check">
                                     <label className="form-label" htmlFor="trending">Trending</label>
-                                    <input className="form-input" type="checkbox" id="trending" />
+                                    <input
+                                        className="form-input"
+                                        type="checkbox"
+                                        id="trending"
+                                        checked={trending}
+                                        onChange={(e) => setTrending(e.target.checked)}
+                                    />
                                 </div>
                             </div>
 
@@ -107,18 +225,19 @@ const Category = () => {
                                     </thead>
                                     <tbody>
                                         {categories.map((category, index) => (
-                                            <tr key={category.id}>
+                                            <tr key={category._id}>
                                                 <td>{index + 1}</td>
-                                                <td>{category.name}</td>
-                                                <td><button className='btn btn-active'>{category.status}</button></td>
+                                                <td>{category.category}</td>
                                                 <td>
-                                                    <button
-                                                        className="btn btn-edit btn-sm me-3"
-                                                        onClick={handleOpenModal}
-                                                    >
+                                                    <button className={category.status ? 'btn btn-active' : 'btn btn-inactive'}>
+                                                        {category.status ? 'Active' : 'Inactive'}
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button className="btn btn-edit btn-sm me-3" onClick={() => handleOpenModal(category)}>
                                                         <img src='/assets/edit.svg' alt='edit' />
                                                     </button>
-                                                    <button className="btn btn-delete btn-sm">
+                                                    <button className="btn btn-delete btn-sm" onClick={() => deleteData(category._id)}>
                                                         <img src='/assets/delete.svg' alt='delete' />
                                                     </button>
                                                 </td>
@@ -133,51 +252,74 @@ const Category = () => {
 
                 {showModal && (
                     <div className="editcategory-page d-flex">
-                        <div className="category-edit ">
+                        <div className="category-edit">
                             <h2>Edit Category</h2>
-                            <div className="category-add d-flex">
+                            <form className="category-add d-flex" onSubmit={handleUpdateCategory}>
                                 <div>
-                                    <label htmlFor="category-name">Category Name</label>
+                                    <label htmlFor="edit-category-name">Category Name</label>
                                     <input
-                                        id="category-name"
+                                        id="edit-category-name"
                                         className="category-field form-control"
                                         type="text"
+                                        value={categoryName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="slug">Slug*</label>
+                                    <label htmlFor="edit-slug">Slug*</label>
                                     <input
-                                        id="slug"
+                                        id="edit-slug"
                                         className="category-field form-control"
                                         type="text"
+                                        value={slug}
+                                        onChange={(e) => setSlug(e.target.value)}
                                     />
                                 </div>
                                 <div className='d-flex flex-column'>
                                     <label htmlFor="status">Status</label>
-                                    <select className='select'>
-                                        <option value=''>Select Category</option>
+                                    <select
+                                        className='select'
+                                        value={status ? 'active' : 'inactive'}
+                                        onChange={(e) => setStatus(e.target.value === 'active')}
+                                        required
+                                    >
+                                        <option value=''>Select Status</option>
                                         <option value='active'>Active</option>
                                         <option value='inactive'>Inactive</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div className="checkbox-group d-flex">
-                                <div className="form-check ">
-                                    <input className="form-input" type="checkbox" id="add-to-home" />
-                                    <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
+                                <div className="checkbox-group d-flex align-items-center">
+                                    <div className="form-check">
+                                        <input
+                                            className="form-input"
+                                            type="checkbox"
+                                            id="add-to-home"
+                                            checked={addToHome}
+                                            onChange={(e) => setAddToHome(e.target.checked)}
+                                        />
+                                        <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            className="form-input"
+                                            type="checkbox"
+                                            id="trending"
+                                            checked={trending}
+                                            onChange={(e) => setTrending(e.target.checked)}
+                                        />
+                                        <label className="form-label" htmlFor="trending">Trending</label>
+                                    </div>
                                 </div>
-                                <div className="form-check ">
-                                    <input className="form-input" type="checkbox" id="trending" />
-                                    <label className="form-label" htmlFor="trending">Trending</label>
-                                </div>
-                            </div>
-                            <button className='btn btn-update'>Update</button>
+                                <button className='btn btn-update update-button' type='submit'>
+                                    update
+                                </button>
+                            </form>
                         </div>
-                    </div>)}
+                    </div>
+                )}
             </main>
         </Layout>
     );
-
 };
 
 export default Category;

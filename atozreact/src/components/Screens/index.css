@@ -96,6 +96,10 @@ body {
 .table td {
     text-align: left;
 }
+.table tr{
+    vertical-align: middle;
+    text-align: center;
+}
 
 @media (max-width: 768px) {
     .table-responsive {
@@ -212,6 +216,11 @@ body {
     margin: 0px 5px;
     border: 1px solid #C1C1C1;
     border-radius: 8px;
+}
+
+.images{
+    width: 78px;
+    height: 37px !important;
 }
 
 /***** category styles *****/

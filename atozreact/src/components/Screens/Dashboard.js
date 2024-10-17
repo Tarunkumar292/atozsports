@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
 
 const Dashboard = () => {
+    const [news, setNews] = useState(null);
+
+    async function getnews() {
+        try {
+            const response = await axios.get("http://localhost:3000/news/allnews");
+            setNews(response.data.news);
+        } catch (error) {
+            console.error('Error fetching news:', error);
+        }
+    }
+
+    async function deletenews(id) {
+        try {
+            const response = await axios.delete(`http://localhost:3000/news/delete/${id}`);
+            console.log('Category deleted successfully:', response.data.news);
+            getnews();
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
+    }
+
+    useEffect(() => {
+        getnews();
+    }, []);
 
     return (
         <Layout>
@@ -92,67 +117,30 @@ const Dashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>01</td>
-                                            <td>State-wise distribution</td>
-                                            <td>Shooting</td>
-                                            <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
-                                            <td>27-09-2024</td>
-                                            <td>Trending</td>
-                                            <td>
-                                                <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
-                                                <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>02</td>
-                                            <td>State-wise distribution</td>
-                                            <td>Shooting</td>
-                                            <td><img src="/assets/news2.png" alt="News 2" className="img-fluid" /></td>
-                                            <td>27-09-2024</td>
-                                            <td>Trending</td>
-                                            <td>
-                                                <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
-                                                <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>03</td>
-                                            <td>State-wise distribution</td>
-                                            <td>Shooting</td>
-                                            <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
-                                            <td>27-09-2024</td>
-                                            <td>Trending</td>
-                                            <td>
-                                                <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
-                                                <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>04</td>
-                                            <td>State-wise distribution</td>
-                                            <td>Shooting</td>
-                                            <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
-                                            <td>27-09-2024</td>
-                                            <td>Trending</td>
-                                            <td>
-                                                <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
-                                                <button className="btn btn-delete btn-sm "><img src='/assets/delete.svg' alt='delete' /></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>05</td>
-                                            <td>State-wise distribution</td>
-                                            <td>Shooting</td>
-                                            <td><img src="/assets/news1.png" alt="News 1" className="img-fluid" /></td>
-                                            <td>27-09-2024</td>
-                                            <td>Trending</td>
-                                            <td>
-                                                <button className="btn btn-edit btn-sm me-3"><img src='/assets/edit.svg' alt='edit' /></button>
-                                                <button className="btn btn-delete btn-sm"><img src='/assets/delete.svg' alt='delete' /></button>
-                                            </td>
-                                        </tr>
-
+                                        {news?.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.title}</td>
+                                                <td>{item.category}</td>
+                                                <td><img src={item.photo} alt={item.title} className="img-fluid images" /></td>
+                                                <td>{item.date}</td>
+                                                <td>
+                                                    {item.is_trending && item.banner && "Trending and Banner"}
+                                                    {!item.is_trending && item.banner && "Banner"}
+                                                    {item.is_trending && !item.banner && "Trending"}
+                                                    {!item.is_trending && !item.banner && "Normal"}
+                                                </td>
+                                                <td>
+                                                    <Link to={`/EditNews?id=${news.id}`}>
+                                                        <button className="btn btn-edit btn-sm me-3">
+                                                            <img src='/assets/edit.svg' alt='edit' />
+                                                        </button>
+                                                    </Link>
+                                                    <button className="btn btn-delete btn-sm" onClick={() => deletenews(item._id)}>
+                                                        <img src='/assets/delete.svg' alt='delete' /></button>
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>
@@ -162,6 +150,6 @@ const Dashboard = () => {
             </main>
         </Layout>
     );
-}
+};
 
 export default Dashboard;
