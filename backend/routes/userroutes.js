@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { updatepass, loginuser, updateprofile } = require('../controller/user');
+const {signupuser, getProfile, loginUser, updatePassword, updateProfile } = require('../controller/user');
+const verifyUser = require('../middleware/authmiddleware');
 
-// Signup user
-// router.post('/signup', signupuser);
+// signup user
+router.post('/signup', signupuser);
 
-//update profile
-router.put('/updateprofile/:id', updateprofile)
+// Get user profile 
+router.get('/profile', verifyUser, getProfile);
 
-// Update user password by ID (protected route)
-router.put('/updatepass/:id', updatepass); 
+// Update profile 
+router.put('/updateprofile', verifyUser, updateProfile);
 
-// Login user
-router.post('/login', loginuser);
+// Update user password
+router.put('/updatepass', verifyUser, updatePassword);
+
+// Login user (no token required)
+router.post('/login', loginUser);
 
 module.exports = router;

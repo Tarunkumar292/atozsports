@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './index.css'; 
+import './index.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -29,14 +29,14 @@ const Login = () => {
       })
       .then((data) => {
         if (data.success) {
-          window.location.href = 'http://localhost:3001/dashboard'; 
+          window.location.href = 'http://localhost:3001/dashboard';
         } else {
-          alert('Login failed: ' + data.message); 
+          alert('Login failed: Invaild credentials ');
         }
       })
       .catch((error) => {
         console.error('Error:', error);
-        alert('An error occurred: ' + error.message); 
+        alert("Error");
       });
   };
 

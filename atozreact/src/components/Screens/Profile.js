@@ -52,8 +52,8 @@ const Profile = () => {
                             </div>
                         </div>
                         <div className='logout-btn d-flex justify-content-center align-items-center'>
-                            <span><img src='/assets/logout.svg' alt='Logout' /></span>
-                            <button className='btn btn-logout'>Logout</button>
+                            <Link to="/login"> <span><img src='/assets/logout.svg' alt='logout' /></span>
+                                <button className='btn btn-logout'>Logout</button></Link>
                         </div>
                     </nav>
                     <div className="col-md-9 col-lg-9 p-0">

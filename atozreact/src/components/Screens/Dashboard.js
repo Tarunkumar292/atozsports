@@ -7,6 +7,9 @@ import Layout from '../layout/Layout';
 
 const Dashboard = () => {
     const [news, setNews] = useState(null);
+    const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]);
+
 
     async function getnews() {
         try {
@@ -26,6 +29,16 @@ const Dashboard = () => {
             console.error('Error deleting category:', error);
         }
     }
+    useEffect(() => {
+        axios.get('http://localhost:3000/category/allcategory')
+            .then((response) => {
+                setCategories(response.data.category);
+            })
+            .catch((error) => {
+                console.error('Error fetching categories:', error);
+            });
+    }, []);
+
 
     useEffect(() => {
         getnews();
@@ -67,8 +80,8 @@ const Dashboard = () => {
                                 </Link>
                             </div>
                             <div className='logout-btn d-flex justify-content-center align-items-center'>
-                                <span><img src='/assets/logout.svg' alt='logout' /></span>
-                                <button className='btn btn-logout'>Logout</button>
+                                <Link to="/login"> <span><img src='/assets/logout.svg' alt='logout' /></span>
+                                    <button className='btn btn-logout'>Logout</button></Link>
                             </div>
                         </div>
                     </nav>
@@ -87,12 +100,23 @@ const Dashboard = () => {
                                         <option value=''>20</option>
                                     </select><span>entries</span>
                                 </div>
-                                <div className='d-flex'>
+                                <div className='d-flex gap-2'>
                                     <div className="categoryselect ">
-                                        <select className='select'>
-                                            <option value=''>Select Category</option>
-                                            {/* Dynamically add category options here */}
+                                        <select
+                                            id="category"
+                                            className="select form-control"
+                                            value={category}
+                                            onChange={(e) => setCategory(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select Category</option>
+                                            {categories.map((cat) => (
+                                                <option key={cat._id} value={cat.category}>
+                                                    {cat.category}
+                                                </option>
+                                            ))}
                                         </select>
+
                                     </div>
                                     <div className="categorysearch ">
                                         <input
