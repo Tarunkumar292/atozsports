@@ -1,14 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
+import axios from 'axios';
 
 const Profile = () => {
     const [showModal, setShowModal] = useState(false);
+    const [username, setUsername] = useState('');
+    const [profile, setProfile] = useState({ name: '', email: '' });
+    const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsername(response.data.user.name);
+                setProfile({
+                    name: response.data.name || '', 
+                    email: response.data.email || '',  
+                });
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
+        fetchProfile();
+    }, [token]);
 
     const handleOpenModal = () => {
         setShowModal(true);
+    };
+
+    const handleProfileChange = (e) => {
+        setProfile({ ...profile, [e.target.name]: e.target.value });
+    };
+
+    const handleUpdateProfile = async () => {
+        try {
+            await axios.put('http://localhost:3000/user/updateprofile', profile, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            alert('Profile updated successfully');
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        setPasswords({ ...passwords, [e.target.name]: e.target.value });
+    };
+
+    const handleUpdatePassword = async () => {
+        if (passwords.newPassword !== passwords.confirmPassword) {
+            alert('New password and confirm password do not match');
+            return;
+        }
+        try {
+            await axios.put('http://localhost:3000/user/updatepass', {
+                currentPassword: passwords.currentPassword,
+                newPassword: passwords.newPassword,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            alert('Password updated successfully');
+        } catch (error) {
+            console.error('Error updating password:', error);
+        }
     };
 
     return (
@@ -28,7 +96,7 @@ const Profile = () => {
                     <nav className="col-md-3 col-lg-3 sidebar px-0">
                         <div className="sidebar-header text-center">
                             <img src="/assets/user.png" className="user my-3 img-fluid" alt="User Profile" />
-                            <span className="ms-2">Username</span>
+                            <span className="ms-2">{username || 'Username'}</span>
                         </div>
                         <p className="text-center m-1">ADMINISTRATION</p>
                         <div className="sidebar-menu">
@@ -66,21 +134,27 @@ const Profile = () => {
                                     <label htmlFor="profile-name">Name</label>
                                     <input
                                         id="profile-name"
+                                        name="name"
                                         className="profile-field form-control"
                                         type="text"
+                                        value={profile.name || ''}  
+                                        onChange={handleProfileChange}
                                     />
                                 </div>
                                 <div>
                                     <label htmlFor="email">Email</label>
                                     <input
                                         id="email"
+                                        name="email"
                                         className="email-field form-control"
                                         type="text"
+                                        value={profile.email || ''}  
+                                        onChange={handleProfileChange}
                                     />
                                 </div>
                             </form>
                             <div className='buttons'>
-                                <button className='btn-updateprofile'>Update Profile</button>
+                                <button className='btn-updateprofile' onClick={handleUpdateProfile}>Update Profile</button>
                                 <button className='btn-updatepass' onClick={handleOpenModal}>Update Password</button>
                             </div>
                         </div>
@@ -93,37 +167,46 @@ const Profile = () => {
                             <h2>Update Password</h2>
                             <div className="update-pass d-flex">
                                 <div>
-                                    <label htmlFor="password">Current Password</label>
+                                    <label htmlFor="currentPassword">Current Password</label>
                                     <input
-                                        id="password"
+                                        id="currentPassword"
+                                        name="currentPassword"
                                         className="password-field form-control"
-                                        type="text"
+                                        type="password"
+                                        value={passwords.currentPassword || ''}  
+                                        onChange={handlePasswordChange}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="password">New Password</label>
+                                    <label htmlFor="newPassword">New Password</label>
                                     <input
-                                        id="password-new"
+                                        id="newPassword"
+                                        name="newPassword"
                                         className="password-field form-control"
-                                        type="text"
+                                        type="password"
+                                        value={passwords.newPassword || ''}  
+                                        onChange={handlePasswordChange}
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="password">Confirm Password</label>
+                                    <label htmlFor="confirmPassword">Confirm Password</label>
                                     <input
-                                        id="password-confirm"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
                                         className="password-field form-control"
-                                        type="text"
+                                        type="password"
+                                        value={passwords.confirmPassword || ''}
+                                        onChange={handlePasswordChange}
                                     />
                                 </div>
                             </div>
-                            <button className='btn btn-update'>Update</button>
+                            <button className='btn btn-update' onClick={handleUpdatePassword}>Update</button>
                         </div>
                     </div>
                 )}
             </main>
         </Layout>
     );
-}
+};
 
 export default Profile;

@@ -1,43 +1,33 @@
 import React, { useState } from 'react';
 import './index.css';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:3000/user/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            console.error('Error response:', text);
-            throw new Error('Failed to log in: ' + (text || 'Unknown error'));
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          window.location.href = 'http://localhost:3001/dashboard';
-        } else {
-          alert('Login failed: Invaild credentials ');
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Error");
+    try {
+      const response = await axios.post('http://localhost:3000/user/login', {
+        email,
+        password
       });
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+      console.log(token)
+
+
+      if (response.data.success) {
+        window.location.href = 'http://localhost:3001/dashboard';
+      } else {
+        alert('Login failed: Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Login failed');
+    }
   };
 
   return (

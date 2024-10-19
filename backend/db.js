@@ -1,10 +1,9 @@
 // Import Mongoose
 const mongoose = require('mongoose');
+require('dotenv').config(); 
 
-// Database connection URL
-const dbURL = 'mongodb://localhost:27017/atozsports';
+const dbURL = process.env.MONGODB_URL || 'mongodb://localhost:27017/atozsports';
 
-// Connect to the MongoDB database
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -21,3 +20,5 @@ db.on('error', (err) => {
 db.once('open', () => {
     console.log("Connection to MongoDB is successful.");
 });
+
+module.exports = db; 

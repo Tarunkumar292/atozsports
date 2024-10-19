@@ -152,7 +152,7 @@ body {
     margin-bottom: 5px;
 }
 
-.table-responsive .btn-active {
+.table-responsive .btn-active , .btn-inactive {
     background: #DCFCE7;
     border-radius: 23px;
     color: #667085;
@@ -167,6 +167,17 @@ body {
     background-color: #22C55E;
     margin-right: 8px;
 }
+
+.table-responsive .btn-inactive::before {
+    content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #22C55E;
+    margin-right: 8px;
+}
+
 
 .card-header .btn-addnews {
     border: none;
