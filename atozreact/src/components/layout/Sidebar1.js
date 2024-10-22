@@ -1,16 +1,39 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import axios from 'axios';
 
-function Sidebar1() {
+const Sidebar = () => {
+    const [username, setUsername] = useState('');
+    const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsername(response.data.user.name);
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
+        if (token) {
+            fetchProfile();
+        }
+    }, [token]);
+
     return (
         <nav className="col-md-3 col-lg-3 sidebar px-0">
             <div className="sidebar-header text-center">
                 <img src="/assets/user.png" className="user my-3 img-fluid" alt="User Pic" />
-                <span className="ms-2">Username</span>
+                <span className="ms-2">{username || 'Username'}</span>
             </div>
             <p className="text-center m-1">ADMINISTRATION</p>
-            <div className='sidebar-menu'>
+            <div className="sidebar-menu">
                 <div className="menu-item d-flex align-items-center">
                     <Link to="/category">
                         <img src="/assets/category.png" className="category" alt="category" />
@@ -37,7 +60,7 @@ function Sidebar1() {
                 </div>
             </div>
         </nav>
-    )
-}
+    );
+};
 
-export default Sidebar1
+export default Sidebar;
