@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
@@ -115,78 +114,138 @@ const Category = () => {
 
     return (
         <Layout>
-            <main className="category-page container-fluid">
-                <div className="row">
-                    <nav className="col-md-3 col-lg-3 sidebar px-0">
-                        <div className="sidebar-header text-center">
-                            <img src="/assets/user.png" className="user my-3 img-fluid" alt="User Profile" />
-                            <span className="ms-2">Username</span>
-                        </div>
-                        <p className="text-center m-1">ADMINISTRATION</p>
-                        <div className="sidebar-menu">
-                            <div className="menu-item d-flex align-items-center">
-                                <Link to="/category">
-                                    <img src="/assets/category.png" className="category" alt="category" />
-                                    <span className="ms-2">Category</span>
-                                </Link>
-                            </div>
-                            <div className="menu-item d-flex align-items-center">
-                                <Link to="/dashboard">
-                                    <img src="/assets/all-news.png" className="news" alt="news" />
-                                    <span className="ms-2">All News</span>
-                                </Link>
-                            </div>
-                            <div className="menu-item d-flex align-items-center">
-                                <Link to="/profile">
-                                    <img src="/assets/profile.png" className="profile-icon" alt="Profile Icon" />
-                                    <span className="ms-2">Profile</span>
-                                </Link>
-                            </div>
-                        </div>
-                        <div className='logout-btn d-flex justify-content-center align-items-center'>
-                            <Link to="/login"> <span><img src='/assets/logout.svg' alt='logout' /></span>
-                                <button className='btn btn-logout'>Logout</button></Link>
-                        </div>
-                    </nav>
+            <div className="card">
+                <div className="card-header">
+                    <h2>Add Category</h2>
+                </div>
+                <div className="category-add d-flex align-items-center">
+                    <div>
+                        <label htmlFor="category-name">Category Name</label>
+                        <input
+                            id="category-name"
+                            className="category-field form-control"
+                            type="text"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="slug">Slug*</label>
+                        <input
+                            id="slug"
+                            className="category-field form-control"
+                            type="text"
+                            value={slug}
+                            onChange={(e) => setSlug(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        className='save-button btn btn-secondary'
+                        type='submit'
+                        onClick={handleSaveCategory}
+                    >
+                        Save
+                    </button>
+                </div>
 
-                    <div className="col-md-9 col-lg-9 p-0">
-                        <div className="card">
-                            <div className="card-header">
-                                <h2>Add Category</h2>
+                <div className="checkbox-group d-flex align-items-center">
+                    <div className="form-check">
+                        <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
+                        <input
+                            className="form-input"
+                            type="checkbox"
+                            id="add-to-home"
+                            checked={addToHome}
+                            onChange={(e) => setAddToHome(e.target.checked)}
+                        />
+                    </div>
+                    <div className="form-check">
+                        <label className="form-label" htmlFor="trending">Trending</label>
+                        <input
+                            className="form-input"
+                            type="checkbox"
+                            id="trending"
+                            checked={trending}
+                            onChange={(e) => setTrending(e.target.checked)}
+                        />
+                    </div>
+                </div>
+
+                <div className="table-responsive">
+                    <table className="table text-start">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {categories.map((category, index) => (
+                                <tr key={category._id}>
+                                    <td>{index + 1}</td>
+                                    <td>{category.category}</td>
+                                    <td>
+                                        <button className={category.status ? 'btn btn-active' : 'btn btn-inactive'}>
+                                            {category.status ? 'Active' : 'Inactive'}
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button className="btn btn-edit btn-sm me-3" onClick={() => handleOpenModal(category)}>
+                                            <img src='/assets/edit.svg' alt='edit' />
+                                        </button>
+                                        <button className="btn btn-delete btn-sm" onClick={() => deleteData(category._id)}>
+                                            <img src='/assets/delete.svg' alt='delete' />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {showModal && (
+                <div className="editcategory-page d-flex">
+                    <div className="category-edit">
+                        <h2>Edit Category</h2>
+                        <form className="category-add d-flex" onSubmit={handleUpdateCategory}>
+                            <div>
+                                <label htmlFor="edit-category-name">Category Name</label>
+                                <input
+                                    id="edit-category-name"
+                                    className="category-field form-control"
+                                    type="text"
+                                    value={categoryName}
+                                    onChange={(e) => setCategoryName(e.target.value)}
+                                />
                             </div>
-                            <div className="category-add d-flex align-items-center">
-                                <div>
-                                    <label htmlFor="category-name">Category Name</label>
-                                    <input
-                                        id="category-name"
-                                        className="category-field form-control"
-                                        type="text"
-                                        value={categoryName}
-                                        onChange={(e) => setCategoryName(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="slug">Slug*</label>
-                                    <input
-                                        id="slug"
-                                        className="category-field form-control"
-                                        type="text"
-                                        value={slug}
-                                        onChange={(e) => setSlug(e.target.value)}
-                                    />
-                                </div>
-                                <button
-                                    className='save-button btn btn-secondary'
-                                    type='submit'
-                                    onClick={handleSaveCategory}
+                            <div>
+                                <label htmlFor="edit-slug">Slug*</label>
+                                <input
+                                    id="edit-slug"
+                                    className="category-field form-control"
+                                    type="text"
+                                    value={slug}
+                                    onChange={(e) => setSlug(e.target.value)}
+                                />
+                            </div>
+                            <div className='d-flex flex-column'>
+                                <label htmlFor="status">Status</label>
+                                <select
+                                    className='select'
+                                    value={status ? 'active' : 'inactive'}
+                                    onChange={(e) => setStatus(e.target.value === 'active')}
+                                    required
                                 >
-                                    Save
-                                </button>
+                                    <option value=''>Select Status</option>
+                                    <option value='active'>Active</option>
+                                    <option value='inactive'>Inactive</option>
+                                </select>
                             </div>
-
                             <div className="checkbox-group d-flex align-items-center">
                                 <div className="form-check">
-                                    <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
                                     <input
                                         className="form-input"
                                         type="checkbox"
@@ -194,9 +253,9 @@ const Category = () => {
                                         checked={addToHome}
                                         onChange={(e) => setAddToHome(e.target.checked)}
                                     />
+                                    <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
                                 </div>
                                 <div className="form-check">
-                                    <label className="form-label" htmlFor="trending">Trending</label>
                                     <input
                                         className="form-input"
                                         type="checkbox"
@@ -204,114 +263,16 @@ const Category = () => {
                                         checked={trending}
                                         onChange={(e) => setTrending(e.target.checked)}
                                     />
+                                    <label className="form-label" htmlFor="trending">Trending</label>
                                 </div>
                             </div>
-
-                            <div className="table-responsive">
-                                <table className="table text-start">
-                                    <thead>
-                                        <tr>
-                                            <th>S.No</th>
-                                            <th>Category</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {categories.map((category, index) => (
-                                            <tr key={category._id}>
-                                                <td>{index + 1}</td>
-                                                <td>{category.category}</td>
-                                                <td>
-                                                    <button className={category.status ? 'btn btn-active' : 'btn btn-inactive'}>
-                                                        {category.status ? 'Active' : 'Inactive'}
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button className="btn btn-edit btn-sm me-3" onClick={() => handleOpenModal(category)}>
-                                                        <img src='/assets/edit.svg' alt='edit' />
-                                                    </button>
-                                                    <button className="btn btn-delete btn-sm" onClick={() => deleteData(category._id)}>
-                                                        <img src='/assets/delete.svg' alt='delete' />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                            <button className='btn btn-update update-button' type='submit'>
+                                update
+                            </button>
+                        </form>
                     </div>
                 </div>
-
-                {showModal && (
-                    <div className="editcategory-page d-flex">
-                        <div className="category-edit">
-                            <h2>Edit Category</h2>
-                            <form className="category-add d-flex" onSubmit={handleUpdateCategory}>
-                                <div>
-                                    <label htmlFor="edit-category-name">Category Name</label>
-                                    <input
-                                        id="edit-category-name"
-                                        className="category-field form-control"
-                                        type="text"
-                                        value={categoryName}
-                                        onChange={(e) => setCategoryName(e.target.value)}
-                                    />
-                                </div>
-                                <div>
-                                    <label htmlFor="edit-slug">Slug*</label>
-                                    <input
-                                        id="edit-slug"
-                                        className="category-field form-control"
-                                        type="text"
-                                        value={slug}
-                                        onChange={(e) => setSlug(e.target.value)}
-                                    />
-                                </div>
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="status">Status</label>
-                                    <select
-                                        className='select'
-                                        value={status ? 'active' : 'inactive'}
-                                        onChange={(e) => setStatus(e.target.value === 'active')}
-                                        required
-                                    >
-                                        <option value=''>Select Status</option>
-                                        <option value='active'>Active</option>
-                                        <option value='inactive'>Inactive</option>
-                                    </select>
-                                </div>
-                                <div className="checkbox-group d-flex align-items-center">
-                                    <div className="form-check">
-                                        <input
-                                            className="form-input"
-                                            type="checkbox"
-                                            id="add-to-home"
-                                            checked={addToHome}
-                                            onChange={(e) => setAddToHome(e.target.checked)}
-                                        />
-                                        <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            className="form-input"
-                                            type="checkbox"
-                                            id="trending"
-                                            checked={trending}
-                                            onChange={(e) => setTrending(e.target.checked)}
-                                        />
-                                        <label className="form-label" htmlFor="trending">Trending</label>
-                                    </div>
-                                </div>
-                                <button className='btn btn-update update-button' type='submit'>
-                                    update
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </main>
+            )}
         </Layout>
     );
 };
