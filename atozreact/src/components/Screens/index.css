@@ -5,6 +5,7 @@ body {
 }
 
 .header {
+    width: 100%;
     padding: 0;
     background-color: #272727;
 }
@@ -152,7 +153,13 @@ body {
     margin-bottom: 5px;
 }
 
-.table-responsive .btn-active , .btn-inactive {
+.table-responsive .btn-active {
+    background: #DCFCE7;
+    border-radius: 23px;
+    color: #667085;
+}
+
+.table-responsive .btn-inactive {
     background: #DCFCE7;
     border-radius: 23px;
     color: #667085;

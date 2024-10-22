@@ -116,12 +116,6 @@ const Category = () => {
     return (
         <Layout>
             <main className="category-page container-fluid">
-                <header className="row">
-                    <div className="col-lg-12 header p-0">
-                        <img src="/assets/logo.png" className="logo img-fluid" alt="A TO Z Sports Logo" />
-                        <div className="line1 p-0"></div>
-                    </div>
-                </header>
                 <div className="row">
                     <nav className="col-md-3 col-lg-3 sidebar px-0">
                         <div className="sidebar-header text-center">
