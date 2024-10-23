@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 
-// Middleware
+//Middleware
 // app.use(cors({
 //     origin: process.env.BASE_URL
 // }));
@@ -29,11 +29,11 @@ app.use('/user', userRouter);
 app.use('/news', newsRouter);
 app.use('/category', categoryRouter);
 
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 
 // app.listen(PORT, () => {
 //     console.log(`Server is running on ${process.env.BASE_URL}`);
 // });
-app.listen(3000, () => {
-    console.log(`Server is running on 3000`);
+app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`);
 });
