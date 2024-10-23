@@ -20,9 +20,14 @@ const addnews = async (req, res) => {
 
         const news = new News(newsData);
         const savedNews = await news.save();
-        res.status(201).json({ message: "News added successfully", savedNews });
+        res.status(201).json({
+            status: true,
+            message: "News added successfully",
+            data: savedNews 
+        });
     } catch (error) {
         res.status(400).json({
+            status: false,
             message: "Failed to add news",
             error: error.message
         });

@@ -1,39 +1,51 @@
 const express = require('express');
 const cors = require('cors');
-const bodyparser = require('body-parser');
 const dotenv = require('dotenv');
-
-dotenv.config();
-
-const app = express();
-
-app.use(cors());
-
-//Middleware
-// app.use(cors({
-//     origin: process.env.BASE_URL
-// }));
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads'));
+const mongoose = require('mongoose');
 
 const userRouter = require('./routes/userroutes');
 const newsRouter = require('./routes/newsroutes');
 const categoryRouter = require('./routes/categoryroutes');
 
-const db = require('./db');
+dotenv.config();
 
+const app = express();
+
+// Database connection
+const dbURL = process.env.MONGODB_URL || "mongodb+srv://atozsports:abc%40123@cluster0.ahe9u.mongodb.net/"; 
+
+mongoose.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB is connected"))
+.catch(err => console.error("Error connecting to MongoDB:", err));
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
+
+// Route setup
 app.use('/user', userRouter);
 app.use('/news', newsRouter);
 app.use('/category', categoryRouter);
 
-const PORT = process.env.PORT || 80;
+// Root route
+app.get('/', (req, res) => {
+    res.send(`Server is running on ${process.env.PORT || 5001}`);
+});
 
-// app.listen(PORT, () => {
-//     console.log(`Server is running on ${process.env.BASE_URL}`);
-// });
-app.listen(PORT, () => {
-    console.log(`Server is running on ${PORT}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
+const PORT = process.env.PORT || 3000;
+
+// Start the server
+app.listen(3000, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
