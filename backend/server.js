@@ -37,12 +37,6 @@ app.get('/', (req, res) => {
     res.send(`Server is running on ${process.env.PORT || 5001}`);
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
-
 const PORT = process.env.PORT || 3000;
 
 // Start the server
