@@ -5,12 +5,12 @@ import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 
 const Addnews = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();
     console.log(id);
-    
+
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [photo, setPhoto] = useState(null);
@@ -20,7 +20,7 @@ const Addnews = () => {
     const [slug, setSlug] = useState('');
     const [newsdetails, setnewsdetails] = useState('');
     const [categories, setCategories] = useState([]);
-    const [editMode, setEditMode] = useState(false); 
+    const [editMode, setEditMode] = useState(false);
 
     const handleTitleChange = (e) => {
         const titleValue = e.target.value;
@@ -54,7 +54,7 @@ const Addnews = () => {
         try {
             let response;
             if (editMode) {
-                response = await axios.put(`http://localhost:3000/news/${id}`, formData, {
+                response = await axios.put(`http://localhost:3000/news/edit/${id}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
@@ -84,7 +84,7 @@ const Addnews = () => {
             });
     }, []);
 
-    
+
     useEffect(() => {
         if (id) {
             setEditMode(true);
@@ -120,7 +120,7 @@ const Addnews = () => {
                                 className="news-field form-control"
                                 type="file"
                                 onChange={handlePhotoChange}
-                                required={!editMode} 
+                                required={!editMode}
                             />
                         </div>
                         <div className='d-flex flex-column'>
