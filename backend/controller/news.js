@@ -1,21 +1,22 @@
 const News = require("../modals/newsschema");
+const path = require('path');
 
 // Add news
 const addnews = async (req, res) => {
 
-    console.log(req.file ,);
-    
+    console.log(req.file,);
+
 
     try {
         let file = req.file
         if (!req.file) {
             return res.status(400).json({ message: "Image file is required" });
         }
-        const imageUrl = "http://localhost:3000"+`/${file?.destination}/${file?.filename}`; 
+        const imageUrl = "http://localhost:3000" + `/${file?.destination}/${file?.filename}`;
 
         const newsData = {
             ...req.body,
-            photo:  imageUrl 
+            photo: imageUrl
         };
 
         const news = new News(newsData);
@@ -23,7 +24,7 @@ const addnews = async (req, res) => {
         res.status(201).json({
             status: true,
             message: "News added successfully",
-            data: savedNews 
+            data: savedNews
         });
     } catch (error) {
         res.status(400).json({
@@ -37,10 +38,24 @@ const addnews = async (req, res) => {
 // Get all news
 const getnews = async (req, res) => {
     try {
-        const news = await News.find().sort({ createdAt: -1 }); 
+        const news = await News.find().sort({ createdAt: -1 });
         res.status(200).json({ news });
     } catch (err) {
         res.status(404).json({ message: err.message });
+    }
+};
+
+//get news by id
+const getnewsbyid = async (req, res) => {
+    try {
+        const { id } = req.params; 
+        const news = await News.findById(id); 
+        if (!news) {
+            return res.status(404).json({ message: 'News not found' });
+        }
+        res.status(200).json({ news });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -48,23 +63,30 @@ const getnews = async (req, res) => {
 const editnews = async (req, res) => {
     try {
         const { id } = req.params;
-        const newsUpdates = req.body;
+        const newsUpdates = { ...req.body };
 
         if (req.file) {
-            newsUpdates.photo = {
-                url: req.file.path,
-                filename: req.file.filename,
-            };
+            const file = req.file;
+            const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+            newsUpdates.photo = imageUrl;
         }
 
         const updatedNews = await News.findByIdAndUpdate(id, newsUpdates, { new: true });
+
         if (!updatedNews) {
             return res.status(404).json({ message: 'News not found' });
         }
-        res.status(200).json({ message: "News updated successfully", updatedNews });
+
+        res.status(200).json({
+            message: "News updated successfully",
+            data: updatedNews
+        });
     } catch (err) {
         console.error(`Error updating news with id ${req.params.id}:`, err);
-        res.status(400).json({ error: err.message });
+        res.status(400).json({
+            error: err.message,
+            message: "Failed to update news"
+        });
     }
 };
 
@@ -83,4 +105,4 @@ const deletenews = async (req, res) => {
     }
 };
 
-module.exports = { addnews, getnews, editnews, deletenews };
+module.exports = { addnews, getnews, getnewsbyid, editnews, deletenews };

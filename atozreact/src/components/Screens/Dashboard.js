@@ -111,7 +111,7 @@ const Dashboard = () => {
                     {!item.is_trending && !item.banner && "Normal"}
                   </td>
                   <td>
-                    <Link to={`/EditNews?id=${item._id}`}>
+                    <Link to={`/Addnews/${item._id}`}>
                       <button className="btn btn-edit btn-sm me-3">
                         <img src='/assets/edit.svg' alt='edit' />
                       </button>

@@ -19,6 +19,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/addnews' element={<Addnews/>}/>
+          <Route path='/addnews/:id' element={<Addnews/>}/>
         </Routes>
       </BrowserRouter>
     </React.Fragment>

@@ -5,8 +5,12 @@ import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
+import { useParams } from 'react-router-dom'; 
 
 const Addnews = () => {
+    const { id } = useParams(); 
+    console.log(id);
+    
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [photo, setPhoto] = useState(null);
@@ -14,8 +18,9 @@ const Addnews = () => {
     const [isTrending, setIsTrending] = useState(false);
     const [title, setTitle] = useState('');
     const [slug, setSlug] = useState('');
-    const [newsdetails, setnewsdetails] = useState('')
+    const [newsdetails, setnewsdetails] = useState('');
     const [categories, setCategories] = useState([]);
+    const [editMode, setEditMode] = useState(false); 
 
     const handleTitleChange = (e) => {
         const titleValue = e.target.value;
@@ -31,29 +36,34 @@ const Addnews = () => {
     const handleSaveNews = async (e) => {
         e.preventDefault();
 
-        if (!photo) {
+        if (!photo && !editMode) {
             alert('Please select a photo before submitting.');
             return;
         }
 
         const formData = new FormData();
-        formData.append("photo", photo);
+        if (photo) formData.append("photo", photo);
         formData.append("category", category);
         formData.append("title", title);
         formData.append("slug", slug);
         formData.append("description", description);
-        formData.append("newsdetails", newsdetails)
+        formData.append("newsdetails", newsdetails);
         formData.append("banner", banner);
         formData.append("is_trending", isTrending);
 
         try {
-            const response = await axios.post('http://localhost:3000/news/add', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            let response;
+            if (editMode) {
+                response = await axios.put(`http://localhost:3000/news/${id}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+            } else {
+                response = await axios.post('http://localhost:3000/news/add', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
+            }
             console.log('Response:', response.data);
-            alert('News added successfully');
+            alert(editMode ? 'News updated successfully' : 'News added successfully');
         } catch (error) {
             if (error.response && error.response.data.code === 11000) {
                 alert('Duplicate slug detected. Please use a unique title.');
@@ -62,6 +72,8 @@ const Addnews = () => {
             }
         }
     };
+
+    // Fetch all categories
     useEffect(() => {
         axios.get('http://localhost:3000/category/allcategory')
             .then((response) => {
@@ -72,11 +84,32 @@ const Addnews = () => {
             });
     }, []);
 
+    
+    useEffect(() => {
+        if (id) {
+            setEditMode(true);
+            axios.get(`http://localhost:3000/news/getnews/${id}`)
+                .then((response) => {
+                    const news = response.data.news;
+                    setTitle(news.title);
+                    setSlug(news.slug);
+                    setDescription(news.description);
+                    setCategory(news.category);
+                    setBanner(news.banner);
+                    setIsTrending(news.is_trending);
+                    setnewsdetails(news.newsdetails);
+                })
+                .catch((error) => {
+                    console.error('Error fetching news data:', error);
+                });
+        }
+    }, [id]);
+
     return (
         <Layout>
             <div className="card">
                 <div className="card-header">
-                    <h2>Add News</h2>
+                    <h2>{editMode ? 'Edit News' : 'Add News'}</h2>
                 </div>
                 <form onSubmit={handleSaveNews}>
                     <div className="news-add d-flex align-items-center">
@@ -87,7 +120,7 @@ const Addnews = () => {
                                 className="news-field form-control"
                                 type="file"
                                 onChange={handlePhotoChange}
-                                required
+                                required={!editMode} 
                             />
                         </div>
                         <div className='d-flex flex-column'>
@@ -98,6 +131,7 @@ const Addnews = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 required
+
                             >
                                 <option value="">Select Category</option>
                                 {categories.map((cat) => (
@@ -106,7 +140,6 @@ const Addnews = () => {
                                     </option>
                                 ))}
                             </select>
-
                         </div>
                     </div>
                     <div className="news-add d-flex align-items-center">
@@ -174,7 +207,9 @@ const Addnews = () => {
                             data={newsdetails}
                             onChange={(event, editor) => setnewsdetails(editor.getData())} />
                     </div>
-                    <button type='submit' className='btn btn-save'>Save</button>
+                    <button type='submit' className='btn btn-save'>
+                        {editMode ? 'Update News' : 'Save News'}
+                    </button>
                 </form>
             </div>
         </Layout>
