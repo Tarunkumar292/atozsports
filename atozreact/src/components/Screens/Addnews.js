@@ -54,11 +54,11 @@ const Addnews = () => {
         try {
             let response;
             if (editMode) {
-                response = await axios.put(`http://localhost:3000/news/edit/${id}`, formData, {
+                response = await axios.put(`http://atoz.gocoolcare.com/news/edit/${id}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
-                response = await axios.post('http://localhost:3000/news/add', formData, {
+                response = await axios.post('http://atoz.gocoolcare.com/news/add', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             }
@@ -75,7 +75,7 @@ const Addnews = () => {
 
     // Fetch all categories
     useEffect(() => {
-        axios.get('http://localhost:3000/category/allcategory')
+        axios.get('http://atoz.gocoolcare.com/category/allcategory')
             .then((response) => {
                 setCategories(response.data.category);
             })
@@ -88,7 +88,7 @@ const Addnews = () => {
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            axios.get(`http://localhost:3000/news/getnews/${id}`)
+            axios.get(`http://atoz.gocoolcare.com/news/getnews/${id}`)
                 .then((response) => {
                     const news = response.data.news;
                     setTitle(news.title);

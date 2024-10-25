@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
 import './index.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/user/login', {
+      const response = await axios.post('http://atoz.gocoolcare.com/user/login', {
         email,
         password
       });
-      const { token } = response.data;
-      localStorage.setItem('token', token);
-      console.log(token)
-
 
       if (response.data.success) {
-        window.location.href = 'http://localhost:3001/dashboard';
+        const { token } = response.data;
+        localStorage.setItem('token', token);
+        console.log(token);
+        navigate('/dashboard');
       } else {
         alert('Login failed: Invalid credentials');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Login failed');
+      alert('Login failed. Please check your credentials or try again later.');
     }
   };
 

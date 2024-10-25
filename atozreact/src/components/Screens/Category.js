@@ -17,7 +17,7 @@ const Category = () => {
     // Fetch all categories
     const getData = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/category/allcategory');
+            const response = await axios.get('http://atoz.gocoolcare.com/category/allcategory');
             setCategories(response.data.category);
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -64,7 +64,7 @@ const Category = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3000/category/add', categoryData);
+            const response = await axios.post('http://atoz.gocoolcare.com/category/add', categoryData);
 
             if (response.status === 201) {
                 alert('Category added successfully!');
@@ -89,7 +89,7 @@ const Category = () => {
             is_trending: trending,
         };
         try {
-            const response = await axios.put(`http://localhost:3000/category/edit/${editingCategoryId}`, updatedCategoryData);
+            const response = await axios.put(`http://atoz.gocoolcare.com/category/edit/${editingCategoryId}`, updatedCategoryData);
             if (response.status === 200) {
                 handleCloseModal();
                 getData();
@@ -105,7 +105,7 @@ const Category = () => {
     // Delete category
     const deleteData = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/category/delete/${id}`);
+            await axios.delete(`http://atoz.gocoolcare.com/category/delete/${id}`);
             getData();
         } catch (error) {
             console.error('Error deleting category:', error);

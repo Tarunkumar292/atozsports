@@ -10,7 +10,7 @@ const Dashboard = () => {
 
   async function getnews() {
     try {
-      const response = await axios.get("http://localhost:3000/news/allnews");
+      const response = await axios.get("http://atoz.gocoolcare.com/news/allnews");
       setNews(response.data.news);
     } catch (error) {
       console.error('Error fetching news:', error);
@@ -19,7 +19,7 @@ const Dashboard = () => {
 
   async function deletenews(id) {
     try {
-      const response = await axios.delete(`http://localhost:3000/news/delete/${id}`);
+      const response = await axios.delete(`http://atoz.gocoolcare.com/news/delete/${id}`);
       console.log('Category deleted successfully:', response.data.news);
       getnews();
     } catch (error) {
@@ -28,7 +28,7 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:3000/category/allcategory')
+    axios.get('http://atoz.gocoolcare.com/category/allcategory')
       .then((response) => {
         setCategories(response.data.category);
       })
