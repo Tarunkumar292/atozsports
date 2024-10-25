@@ -56,6 +56,16 @@ body {
     color: #ffc107;
 }
 
+.col-md-9.col-lg-9 {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+
+}
+
+.col-md-9.col-lg-9::-webkit-scrollbar {
+    display: none;
+}
+
 .container-fluid .card {
     border: none;
     background-color: #fff;
@@ -97,7 +107,8 @@ body {
 .table td {
     text-align: left;
 }
-.table tr{
+
+.table tr {
     vertical-align: middle;
     text-align: center;
 }
@@ -236,7 +247,7 @@ body {
     border-radius: 8px;
 }
 
-.images{
+.images {
     width: 78px;
     height: 37px !important;
 }
