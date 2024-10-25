@@ -47,6 +47,7 @@ const Profile = () => {
                 },
             });
             alert('Profile updated successfully');
+            setProfile({ name: '', email: '' })
         } catch (error) {
             console.error('Error updating profile:', error);
         }
@@ -71,6 +72,8 @@ const Profile = () => {
                 },
             });
             alert('Password updated successfully');
+            setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            setShowModal(false);
         } catch (error) {
             console.error('Error updating password:', error);
         }
