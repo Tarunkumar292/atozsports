@@ -10,7 +10,6 @@ const Profile = () => {
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
     const token = localStorage.getItem('token');
-
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -19,9 +18,10 @@ const Profile = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                console.log(response)
                 setProfile({
-                    name: response.data.name || '',
-                    email: response.data.email || '',
+                    name: response.data.user.name,
+                    email: response.data.user.email,
                 });
             } catch (error) {
                 console.error('Error fetching profile:', error);
@@ -47,7 +47,6 @@ const Profile = () => {
                 },
             });
             alert('Profile updated successfully');
-            setProfile({ name: '', email: '' })
         } catch (error) {
             console.error('Error updating profile:', error);
         }
@@ -116,7 +115,7 @@ const Profile = () => {
             </div>
             {showModal && (
                 <div className="editcategory-page d-flex">
-                    <div className="category-edit ">
+                    <div className="category-edit">
                         <h2>Update Password</h2>
                         <div className="update-pass d-flex">
                             <div>

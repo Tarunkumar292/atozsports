@@ -18,7 +18,13 @@ const Category = () => {
     const getData = async () => {
         try {
             const response = await axios.get('http://atoz.gocoolcare.com/category/allcategory');
-            setCategories(response.data.category);
+
+            const sortedCategories = response.data.category.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
+
+            setCategories(sortedCategories);
+            console.log(sortedCategories);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }

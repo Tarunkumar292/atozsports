@@ -12,6 +12,12 @@ const Dashboard = () => {
     try {
       const response = await axios.get("http://atoz.gocoolcare.com/news/allnews");
       setNews(response.data.news);
+      const sortedNews = response.data.news.sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
+      setNews(sortedNews);
+      console.log(sortedNews);
+      
     } catch (error) {
       console.error('Error fetching news:', error);
     }

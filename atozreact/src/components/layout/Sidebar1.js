@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
 
 const Sidebar = () => {
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(''); 
     const token = localStorage.getItem('token');
 
     useEffect(() => {

@@ -10,9 +10,9 @@ const categoryschema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status:{
+    status: {
         type: Boolean,
-        default:false
+        default: false
     },
     add_page: {
         type: Boolean,
@@ -22,14 +22,14 @@ const categoryschema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-});
+}, { timestamps: true });
+
 categoryschema.pre('save', function (next) {
     if (this.isModified('category')) {
         this.slug = slugify(this.category, { lower: true, strict: true });
     }
     next();
 });
-
 
 const Category = mongoose.model('Category', categoryschema);
 module.exports = Category;
