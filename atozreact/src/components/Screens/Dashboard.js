@@ -4,32 +4,33 @@ import { Link } from 'react-router-dom';
 import Layout from '../layout/Layout';
 
 const Dashboard = () => {
-  const [news, setNews] = useState(null);
+  const [news, setNews] = useState([]);
+  const [filteredNews, setFilteredNews] = useState([]);
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [newsPerPage, setNewsPerPage] = useState(5);
 
-  async function getnews() {
+  async function getNews() {
     try {
       const response = await axios.get("http://atoz.gocoolcare.com/news/allnews");
-      setNews(response.data.news);
       const sortedNews = response.data.news.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
       setNews(sortedNews);
-      console.log(sortedNews);
-      
+      setFilteredNews(sortedNews);
     } catch (error) {
       console.error('Error fetching news:', error);
     }
   }
 
-  async function deletenews(id) {
+  async function deleteNews(id) {
     try {
-      const response = await axios.delete(`http://atoz.gocoolcare.com/news/delete/${id}`);
-      console.log('Category deleted successfully:', response.data.news);
-      getnews();
+      await axios.delete(`http://atoz.gocoolcare.com/news/delete/${id}`);
+      getNews();
     } catch (error) {
-      console.error('Error deleting category:', error);
+      console.error('Error deleting news:', error);
     }
   }
 
@@ -44,8 +45,31 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    getnews();
+    getNews();
   }, []);
+
+  useEffect(() => {
+    let tempNews = news;
+
+    if (category) {
+      tempNews = tempNews.filter((item) => item.category === category);
+    }
+
+    if (searchQuery) {
+      tempNews = tempNews.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredNews(tempNews);
+    setCurrentPage(1);
+  }, [category, searchQuery, news]);
+
+  const indexOfLastNews = currentPage * newsPerPage;
+  const indexOfFirstNews = indexOfLastNews - newsPerPage;
+  const currentNews = filteredNews.slice(indexOfFirstNews, indexOfLastNews);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Layout>
@@ -56,25 +80,24 @@ const Dashboard = () => {
             <button className="btn btn-addnews ms-3">+ Add News</button>
           </Link>
         </div>
-        <div className='category d-flex justify-content-between p-3'>
-          <div className='entries'>
+        <div className="category d-flex justify-content-between p-3">
+          <div className="entries">
             <span>Show</span>
-            <select>
-              <option value=''>5</option>
-              <option value=''>10</option>
-              <option value=''>15</option>
-              <option value=''>20</option>
+            <select onChange={(e) => setNewsPerPage(Number(e.target.value))} value={newsPerPage}>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
             </select>
             <span>entries</span>
           </div>
-          <div className='d-flex gap-2'>
+          <div className="d-flex gap-2">
             <div className="categoryselect">
               <select
                 id="category"
                 className="select form-control"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                required
               >
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
@@ -85,7 +108,13 @@ const Dashboard = () => {
               </select>
             </div>
             <div className="categorysearch">
-              <input className='search' type='text' placeholder='Search' />
+              <input
+                className="search"
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -103,9 +132,9 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {news?.map((item, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
+              {currentNews.map((item, index) => (
+                <tr key={item._id}>
+                  <td>{indexOfFirstNews + index + 1}</td>
                   <td>{item.title}</td>
                   <td>{item.category}</td>
                   <td><img src={item.photo} alt={item.title} className="img-fluid images" /></td>
@@ -119,11 +148,11 @@ const Dashboard = () => {
                   <td>
                     <Link to={`/Addnews/${item._id}`}>
                       <button className="btn btn-edit btn-sm me-3">
-                        <img src='/assets/edit.svg' alt='edit' />
+                        <img src="/assets/edit.svg" alt="edit" />
                       </button>
                     </Link>
-                    <button className="btn btn-delete btn-sm" onClick={() => deletenews(item._id)}>
-                      <img src='/assets/delete.svg' alt='delete' />
+                    <button className="btn btn-delete btn-sm" onClick={() => deleteNews(item._id)}>
+                      <img src="/assets/delete.svg" alt="delete" />
                     </button>
                   </td>
                 </tr>
@@ -131,8 +160,36 @@ const Dashboard = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          newsPerPage={newsPerPage}
+          totalNews={filteredNews.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </div>
     </Layout>
+  );
+};
+
+const Pagination = ({ newsPerPage, totalNews, paginate, currentPage }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalNews / newsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <nav className="pagination">
+      {pageNumbers.map(number => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          className={`pagination-button ${number === currentPage ? 'active' : ''}`}
+        >
+          {number}
+        </button>
+      ))}
+    </nav>
   );
 };
 

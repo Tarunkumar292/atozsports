@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
+import CustomAlert from './CustomAlert';
 import Layout from '../layout/Layout';
 import axios from 'axios';
 
@@ -13,18 +14,19 @@ const Category = () => {
     const [trending, setTrending] = useState(false);
     const [categories, setCategories] = useState([]);
     const [editingCategoryId, setEditingCategoryId] = useState(null);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
-    // Fetch all categories
+    const [currentPage, setCurrentPage] = useState(1);
+    const categoriesPerPage = 5;
+
     const getData = async () => {
         try {
             const response = await axios.get('http://atoz.gocoolcare.com/category/allcategory');
-
             const sortedCategories = response.data.category.sort(
                 (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             );
-
             setCategories(sortedCategories);
-            console.log(sortedCategories);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
@@ -58,7 +60,6 @@ const Category = () => {
         setTrending(false);
     };
 
-    // Save new category
     const handleSaveCategory = async (e) => {
         e.preventDefault();
         const categoryData = {
@@ -71,20 +72,20 @@ const Category = () => {
 
         try {
             const response = await axios.post('http://atoz.gocoolcare.com/category/add', categoryData);
-
             if (response.status === 201) {
-                alert('Category added successfully!');
+                setAlertMessage('Category added successfully!');
+                setShowAlert(true);
                 getData();
             } else {
-                alert('Failed to add category: ' + response.data.message);
+                setAlertMessage('Failed to add category: ' + response.data.message);
+                setShowAlert(true);
             }
         } catch (error) {
-            alert('Failed to add category: ' + (error.response?.data?.message || 'Unknown error'));
+            setAlertMessage('Failed to add category: ' + (error.response?.data?.message || 'Unknown error'));
+            setShowAlert(true);
         }
     };
 
-
-    // Update category
     const handleUpdateCategory = async (e) => {
         e.preventDefault();
         const updatedCategoryData = {
@@ -100,15 +101,16 @@ const Category = () => {
                 handleCloseModal();
                 getData();
             } else {
-                alert('Failed to update category');
+                setAlertMessage('Failed to update category');
+                setShowAlert(true);
             }
         } catch (error) {
             console.error('Error updating category:', error);
-            alert('An error occurred while updating the category');
+            setAlertMessage('An error occurred while updating the category');
+            setShowAlert(true);
         }
     };
 
-    // Delete category
     const deleteData = async (id) => {
         try {
             await axios.delete(`http://atoz.gocoolcare.com/category/delete/${id}`);
@@ -117,6 +119,13 @@ const Category = () => {
             console.error('Error deleting category:', error);
         }
     };
+
+    const indexOfLastCategory = currentPage * categoriesPerPage;
+    const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+    const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+    const totalPages = Math.ceil(categories.length / categoriesPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <Layout>
@@ -188,9 +197,9 @@ const Category = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {categories.map((category, index) => (
+                            {currentCategories.map((category, index) => (
                                 <tr key={category._id}>
-                                    <td>{index + 1}</td>
+                                    <td>{indexOfFirstCategory + index + 1}</td>
                                     <td>{category.category}</td>
                                     <td>
                                         <button className={category.status ? 'btn btn-active' : 'btn btn-inactive'}>
@@ -210,7 +219,26 @@ const Category = () => {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination Controls */}
+                <div className="pagination">
+                    {[...Array(totalPages)].map((_, pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            className={`pagination-button ${pageNumber + 1 === currentPage ? 'active' : ''}`}
+                            onClick={() => paginate(pageNumber + 1)}
+                        >
+                            {pageNumber + 1}
+                        </button>
+                    ))}
+                </div>
             </div>
+            {showAlert && (
+                <CustomAlert
+                    message={alertMessage}
+                    onClose={() => setShowAlert(false)}
+                />
+            )}
 
             {showModal && (
                 <div className="editcategory-page d-flex">
@@ -240,40 +268,25 @@ const Category = () => {
                             <div className='d-flex flex-column'>
                                 <label htmlFor="status">Status</label>
                                 <select
-                                    className='select'
-                                    value={status ? 'active' : 'inactive'}
-                                    onChange={(e) => setStatus(e.target.value === 'active')}
-                                    required
+                                    className='category-field form-control'
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
                                 >
-                                    <option value=''>Select Status</option>
-                                    <option value='active'>Active</option>
-                                    <option value='inactive'>Inactive</option>
+                                    <option value={true}>Active</option>
+                                    <option value={false}>Inactive</option>
                                 </select>
                             </div>
-                            <div className="checkbox-group d-flex align-items-center">
-                                <div className="form-check">
-                                    <input
-                                        className="form-input"
-                                        type="checkbox"
-                                        id="add-to-home"
-                                        checked={addToHome}
-                                        onChange={(e) => setAddToHome(e.target.checked)}
-                                    />
-                                    <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
-                                </div>
-                                <div className="form-check">
-                                    <input
-                                        className="form-input"
-                                        type="checkbox"
-                                        id="trending"
-                                        checked={trending}
-                                        onChange={(e) => setTrending(e.target.checked)}
-                                    />
-                                    <label className="form-label" htmlFor="trending">Trending</label>
-                                </div>
-                            </div>
-                            <button className='btn btn-update update-button' type='submit'>
-                                update
+                            <button
+                                className='save-button btn btn-secondary'
+                                type='submit'
+                            >
+                                Save
+                            </button>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={handleCloseModal}
+                            >
+                                Close
                             </button>
                         </form>
                     </div>
