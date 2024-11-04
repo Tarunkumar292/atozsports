@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Layout from '../layout/Layout';
+import CustomAlert from './CustomAlert';
 
 const Dashboard = () => {
   const [news, setNews] = useState([]);
@@ -11,6 +12,9 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [newsPerPage, setNewsPerPage] = useState(5);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   async function getNews() {
     try {
@@ -28,8 +32,14 @@ const Dashboard = () => {
   async function deleteNews(id) {
     try {
       await axios.delete(`http://atoz.gocoolcare.com/news/delete/${id}`);
+      setAlertMessage('News Deleted Successfully')
+      setAlertType('success')
+      setShowAlert(true)
       getNews();
     } catch (error) {
+      setAlertMessage('Failed to delete news')
+      setAlertType('error')
+      setShowAlert(true)
       console.error('Error deleting news:', error);
     }
   }
@@ -167,6 +177,13 @@ const Dashboard = () => {
           currentPage={currentPage}
         />
       </div>
+      {showAlert && (
+        <CustomAlert
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </Layout>
   );
 };

@@ -4,6 +4,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
+import CustomAlert from './CustomAlert';
 import Layout from '../layout/Layout';
 import { useParams } from 'react-router-dom';
 
@@ -21,6 +22,10 @@ const Addnews = () => {
     const [newsdetails, setnewsdetails] = useState('');
     const [categories, setCategories] = useState([]);
     const [editMode, setEditMode] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+
 
     const handleTitleChange = (e) => {
         const titleValue = e.target.value;
@@ -63,10 +68,14 @@ const Addnews = () => {
                 });
             }
             console.log('Response:', response.data);
-            alert(editMode ? 'News updated successfully' : 'News added successfully');
+            setAlertMessage(editMode ? 'News updated successfully' : 'News added successfully');
+            setAlertType('success');
+            setShowAlert(true);
         } catch (error) {
             if (error.response && error.response.data.code === 11000) {
-                alert('Duplicate slug detected. Please use a unique title.');
+                setAlertMessage('Duplicate slug detected. Please use a unique title.');
+                setAlertType('error');
+                setShowAlert(true);
             } else {
                 console.error('Error:', error);
             }
@@ -212,6 +221,14 @@ const Addnews = () => {
                     </button>
                 </form>
             </div>
+            {showAlert && (
+                <CustomAlert
+                    message={alertMessage}
+                    type={alertType}
+                    onClose={() => setShowAlert(false)}
+                />
+            )}
+
         </Layout>
     );
 };

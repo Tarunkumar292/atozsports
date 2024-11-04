@@ -3,11 +3,15 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
 import Layout from '../layout/Layout';
 import axios from 'axios';
+import CustomAlert from './CustomAlert';
 
 const Profile = () => {
     const [showModal, setShowModal] = useState(false);
     const [profile, setProfile] = useState({ name: '', email: '' });
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
     const token = localStorage.getItem('token');
     useEffect(() => {
@@ -46,8 +50,13 @@ const Profile = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            alert('Profile updated successfully');
+            setAlertMessage('Profile updated successfully');
+            setAlertType('success');
+            setShowAlert(true); 
         } catch (error) {
+            setAlertMessage('Failed to update Profile')
+            setAlertType('error');
+            setShowAlert(true);
             console.error('Error updating profile:', error);
         }
     };
@@ -58,7 +67,9 @@ const Profile = () => {
 
     const handleUpdatePassword = async () => {
         if (passwords.newPassword !== passwords.confirmPassword) {
-            alert('New password and confirm password do not match');
+            setAlertMessage('New password and confirm password do not match');
+            setAlertType('error');
+            setShowAlert(true);
             return;
         }
         try {
@@ -70,10 +81,15 @@ const Profile = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            alert('Password updated successfully');
+            setAlertMessage('Password updated successfully');
+            setAlertType('success');
+            setShowAlert(true);
             setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });
             setShowModal(false);
         } catch (error) {
+            setAlertMessage('Failed to update password')
+            setAlertType('error');
+            setShowAlert(true);
             console.error('Error updating password:', error);
         }
     };
@@ -155,6 +171,13 @@ const Profile = () => {
                         <button className='btn btn-update' onClick={handleUpdatePassword}>Update</button>
                     </div>
                 </div>
+            )}
+            {showAlert && (
+                <CustomAlert
+                    message={alertMessage}
+                    type={alertType}
+                    onClose={() => setShowAlert(false)}
+                />
             )}
         </Layout>
     );

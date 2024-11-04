@@ -1,12 +1,11 @@
-// CustomAlert.js
 import React from 'react';
 import './index.css'; 
 
-const CustomAlert = ({ message, onClose }) => {
+const CustomAlert = ({ message, onClose, type }) => {
   return (
-    <div className="custom-alert">
+    <div className={`custom-alert ${type}`}>
       <span>{message}</span>
-      <button onClick={onClose}>Close</button>
+      <button onClick={onClose}>X</button>
     </div>
   );
 };

@@ -15,6 +15,7 @@ const Category = () => {
     const [categories, setCategories] = useState([]);
     const [editingCategoryId, setEditingCategoryId] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -74,14 +75,17 @@ const Category = () => {
             const response = await axios.post('http://atoz.gocoolcare.com/category/add', categoryData);
             if (response.status === 201) {
                 setAlertMessage('Category added successfully!');
+                setAlertType('success')
                 setShowAlert(true);
                 getData();
             } else {
                 setAlertMessage('Failed to add category: ' + response.data.message);
+                setAlertType('error')
                 setShowAlert(true);
             }
         } catch (error) {
             setAlertMessage('Failed to add category: ' + (error.response?.data?.message || 'Unknown error'));
+            setAlertType('error')
             setShowAlert(true);
         }
     };
@@ -99,14 +103,19 @@ const Category = () => {
             const response = await axios.put(`http://atoz.gocoolcare.com/category/edit/${editingCategoryId}`, updatedCategoryData);
             if (response.status === 200) {
                 handleCloseModal();
+                setAlertMessage('Category updated successfully!');
+                setAlertType('success')
+                setShowAlert(true);
                 getData();
             } else {
                 setAlertMessage('Failed to update category');
+                setAlertType('error')
                 setShowAlert(true);
             }
         } catch (error) {
             console.error('Error updating category:', error);
             setAlertMessage('An error occurred while updating the category');
+            setAlertType('error')
             setShowAlert(true);
         }
     };
@@ -114,9 +123,15 @@ const Category = () => {
     const deleteData = async (id) => {
         try {
             await axios.delete(`http://atoz.gocoolcare.com/category/delete/${id}`);
+            setAlertMessage('Category deleted successfully')
+            setAlertType('success')
+            setShowAlert(true);
             getData();
         } catch (error) {
             console.error('Error deleting category:', error);
+            setAlertMessage('Failed to Delete the category');
+            setAlertType('error')
+            setShowAlert(true);
         }
     };
 
@@ -236,6 +251,7 @@ const Category = () => {
             {showAlert && (
                 <CustomAlert
                     message={alertMessage}
+                    type={alertType}
                     onClose={() => setShowAlert(false)}
                 />
             )}
@@ -268,25 +284,40 @@ const Category = () => {
                             <div className='d-flex flex-column'>
                                 <label htmlFor="status">Status</label>
                                 <select
-                                    className='category-field form-control'
-                                    value={status}
-                                    onChange={(e) => setStatus(e.target.value)}
+                                    className='select'
+                                    value={status ? 'active' : 'inactive'}
+                                    onChange={(e) => setStatus(e.target.value === 'active')}
+                                    required
                                 >
-                                    <option value={true}>Active</option>
-                                    <option value={false}>Inactive</option>
+                                    <option value=''>Select Status</option>
+                                    <option value='active'>Active</option>
+                                    <option value='inactive'>Inactive</option>
                                 </select>
                             </div>
-                            <button
-                                className='save-button btn btn-secondary'
-                                type='submit'
-                            >
-                                Save
-                            </button>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={handleCloseModal}
-                            >
-                                Close
+                            <div className="checkbox-group d-flex align-items-center">
+                                <div className="form-check">
+                                    <input
+                                        className="form-input"
+                                        type="checkbox"
+                                        id="add-to-home"
+                                        checked={addToHome}
+                                        onChange={(e) => setAddToHome(e.target.checked)}
+                                    />
+                                    <label className="form-label" htmlFor="add-to-home">Add to Home Page</label>
+                                </div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-input"
+                                        type="checkbox"
+                                        id="trending"
+                                        checked={trending}
+                                        onChange={(e) => setTrending(e.target.checked)}
+                                    />
+                                    <label className="form-label" htmlFor="trending">Trending</label>
+                                </div>
+                            </div>
+                            <button className='btn btn-update update-button' type='submit'>
+                                update
                             </button>
                         </form>
                     </div>
