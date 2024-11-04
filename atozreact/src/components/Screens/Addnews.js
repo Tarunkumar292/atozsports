@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.css';
@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom';
 
 const Addnews = () => {
     const { id } = useParams();
-    console.log(id);
 
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
@@ -26,11 +25,12 @@ const Addnews = () => {
     const [alertType, setAlertType] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
-
     const handleTitleChange = (e) => {
         const titleValue = e.target.value;
         setTitle(titleValue);
-        const generatedSlug = titleValue.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        const generatedSlug = titleValue.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
         setSlug(generatedSlug);
     };
 
@@ -78,27 +78,32 @@ const Addnews = () => {
                 setShowAlert(true);
             } else {
                 console.error('Error:', error);
+                setAlertMessage('An error occurred. Please try again.');
+                setAlertType('error');
+                setShowAlert(true);
             }
         }
     };
 
-    // Fetch all categories
     useEffect(() => {
-        axios.get('http://atoz.gocoolcare.com/category/allcategory')
-            .then((response) => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://atoz.gocoolcare.com/category/allcategory');
                 setCategories(response.data.category);
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error('Error fetching categories:', error);
-            });
-    }, []);
+            }
+        };
 
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            axios.get(`http://atoz.gocoolcare.com/news/getnews/${id}`)
-                .then((response) => {
+            const fetchNewsData = async () => {
+                try {
+                    const response = await axios.get(`http://atoz.gocoolcare.com/news/getnews/${id}`);
                     const news = response.data.news;
                     setTitle(news.title);
                     setSlug(news.slug);
@@ -107,12 +112,35 @@ const Addnews = () => {
                     setBanner(news.banner);
                     setIsTrending(news.is_trending);
                     setnewsdetails(news.newsdetails);
-                })
-                .catch((error) => {
+                } catch (error) {
                     console.error('Error fetching news data:', error);
-                });
+                }
+            };
+
+            fetchNewsData();
         }
     }, [id]);
+
+    const handleImageUpload = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64Image = reader.result;
+                const quill = this.quillRef.getEditor();
+                const range = quill.getSelection();
+                if (range) {
+                    quill.insertEmbed(range.index, 'image', base64Image);
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+    };
 
     return (
         <Layout>
@@ -140,7 +168,6 @@ const Addnews = () => {
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 required
-
                             >
                                 <option value="">Select Category</option>
                                 {categories.map((cat) => (
@@ -211,14 +238,24 @@ const Addnews = () => {
                     </div>
                     <div className='editor'>
                         <label htmlFor="editor">News Details*</label>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={newsdetails}
-                            onChange={(event, editor) => {
-                                console.log(event);
-                                console.log(editor);
-                                setnewsdetails(editor.getData())
+                        <ReactQuill
+                            value={newsdetails}
+                            onChange={setnewsdetails}
+                            modules={{
+                                toolbar: [
+                                    [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                                    [{ size: [] }],
+                                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                                    [{ list: 'ordered' }, { list: 'bullet' }],
+                                    ['link', 'image', 'video'],
+                                    ['clean'],
+                                    ['code-block']
+                                ],
                             }}
+                            formats={[
+                                'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote',
+                                'list', 'bullet', 'link', 'image', 'video', 'code-block'
+                            ]}
                         />
                     </div>
                     <button type='submit' className='btn btn-save'>
@@ -233,7 +270,6 @@ const Addnews = () => {
                     onClose={() => setShowAlert(false)}
                 />
             )}
-
         </Layout>
     );
 };
