@@ -214,7 +214,12 @@ const Addnews = () => {
                         <CKEditor
                             editor={ClassicEditor}
                             data={newsdetails}
-                            onChange={(event, editor) => setnewsdetails(editor.getData())} />
+                            onChange={(event, editor) => {
+                                console.log(event);
+                                console.log(editor);
+                                setnewsdetails(editor.getData())
+                            }}
+                        />
                     </div>
                     <button type='submit' className='btn btn-save'>
                         {editMode ? 'Update News' : 'Save News'}
