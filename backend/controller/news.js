@@ -1,23 +1,17 @@
 const News = require("../modals/newsschema");
+const fs = require('fs');
 const path = require('path');
 
 // Add news
 const addnews = async (req, res) => {
-
-    console.log(req.file,);
-
-
     try {
-        let file = req.file
-        if (!req.file) {
+        let file = req.file;
+        if (!file) {
             return res.status(400).json({ message: "Image file is required" });
         }
-        const imageUrl = "http://localhost:3000" + `/${file?.destination}/${file?.filename}`;
 
-        const newsData = {
-            ...req.body,
-            photo: imageUrl
-        };
+        const imageUrl = `http://atoz.gocoolcare.com/${file.destination}/${file.filename}`;
+        const newsData = { ...req.body, photo: imageUrl };
 
         const news = new News(newsData);
         const savedNews = await news.save();
@@ -45,11 +39,11 @@ const getnews = async (req, res) => {
     }
 };
 
-//get news by id
+// Get news by id
 const getnewsbyid = async (req, res) => {
     try {
-        const { id } = req.params; 
-        const news = await News.findById(id); 
+        const { id } = req.params;
+        const news = await News.findById(id);
         if (!news) {
             return res.status(404).json({ message: 'News not found' });
         }
@@ -67,12 +61,11 @@ const editnews = async (req, res) => {
 
         if (req.file) {
             const file = req.file;
-            const imageUrl = `http://localhost:3000/uploads/${file.filename}`;
+            const imageUrl = `http://atoz.gocoolcare.com/uploads/${file.filename}`;
             newsUpdates.photo = imageUrl;
         }
 
         const updatedNews = await News.findByIdAndUpdate(id, newsUpdates, { new: true });
-
         if (!updatedNews) {
             return res.status(404).json({ message: 'News not found' });
         }
@@ -98,6 +91,14 @@ const deletenews = async (req, res) => {
         if (!news) {
             return res.status(404).json({ message: 'News not found' });
         }
+
+        const imagePath = path.join(__dirname, "..", "uploads", path.basename(news.photo));
+        fs.unlink(imagePath, (err) => {
+            if (err) {
+                console.error("Failed to delete image:", err);
+            }
+        });
+
         res.status(200).json({ message: 'News deleted successfully' });
     } catch (err) {
         console.log(err);
