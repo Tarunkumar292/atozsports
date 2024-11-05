@@ -78,6 +78,13 @@ const Category = () => {
                 setAlertType('success')
                 setShowAlert(true);
                 getData();
+
+                setCategoryName('');
+                setSlug('');
+                setStatus(true);
+                setAddToHome(false);
+                setTrending(false);
+
             } else {
                 setAlertMessage('Failed to add category: ' + response.data.message);
                 setAlertType('error')

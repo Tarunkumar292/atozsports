@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
@@ -13,6 +13,7 @@ const Addnews = () => {
 
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
+    const fileInputRef = useRef(null);
     const [photo, setPhoto] = useState(null);
     const [banner, setBanner] = useState(false);
     const [isTrending, setIsTrending] = useState(false);
@@ -34,8 +35,9 @@ const Addnews = () => {
         setSlug(generatedSlug);
     };
 
-    const handlePhotoChange = (e) => {
-        setPhoto(e.target.files[0]);
+    const handlePhotoChange = (event) => {
+        const file = event.target.files[0];
+        setPhoto(file);
     };
 
     const handleSaveNews = async (e) => {
@@ -56,6 +58,22 @@ const Addnews = () => {
         formData.append("banner", banner);
         formData.append("is_trending", isTrending);
 
+        const resetForm = () => {
+            setDescription('');
+            setCategory('');
+            setPhoto(null);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';  
+            }
+            setBanner(false);
+            setIsTrending(false);
+            setTitle('');
+            setSlug('');
+            setnewsdetails('');
+            setEditMode(false);
+        };
+
+
         try {
             let response;
             if (editMode) {
@@ -71,6 +89,7 @@ const Addnews = () => {
             setAlertMessage(editMode ? 'News updated successfully' : 'News added successfully');
             setAlertType('success');
             setShowAlert(true);
+            resetForm();
         } catch (error) {
             if (error.response && error.response.data.code === 11000) {
                 setAlertMessage('Duplicate slug detected. Please use a unique title.');
@@ -156,6 +175,7 @@ const Addnews = () => {
                                 id="photo"
                                 className="news-field form-control"
                                 type="file"
+                                ref={fileInputRef}
                                 onChange={handlePhotoChange}
                                 required={!editMode}
                             />
