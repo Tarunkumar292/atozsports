@@ -6,7 +6,7 @@ import axios from 'axios';
 import CustomAlert from './CustomAlert';
 
 const Profile = () => {
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);   
     const [profile, setProfile] = useState({ name: '', email: '' });
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
     const [alertMessage, setAlertMessage] = useState('');

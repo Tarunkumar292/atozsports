@@ -465,11 +465,11 @@ footer {
 }
 
 .custom-alert.success {
-    background-color: #14A44D; 
+    background-color: #14A44D;
 }
 
 .custom-alert.error {
-    background-color: #f44336; 
+    background-color: #f44336;
 }
 
 .custom-alert button {
