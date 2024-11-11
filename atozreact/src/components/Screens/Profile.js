@@ -17,7 +17,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('http://ean.gocoolcare.com/user/profile', {
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/user/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -45,7 +45,7 @@ const Profile = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            await axios.put('http://ean.gocoolcare.com/user/updateprofile', profile, {
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updateprofile`, profile, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -73,7 +73,7 @@ const Profile = () => {
             return;
         }
         try {
-            await axios.put('http://ean.gocoolcare.com/user/updatepass', {
+            await axios.put(`${process.env.REACT_APP_BASE_URL}/user/updatepass`, {
                 currentPassword: passwords.currentPassword,
                 newPassword: passwords.newPassword,
             }, {

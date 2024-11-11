@@ -23,7 +23,7 @@ const Category = () => {
 
     const getData = async () => {
         try {
-            const response = await axios.get('http://ean.gocoolcare.com/category/allcategory');
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/category/allcategory`);
             const sortedCategories = response.data.category.sort(
                 (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             );
@@ -72,7 +72,7 @@ const Category = () => {
         };
 
         try {
-            const response = await axios.post('http://ean.gocoolcare.com/category/add', categoryData);
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/category/add`, categoryData);
             if (response.status === 201) {
                 setAlertMessage('Category added successfully!');
                 setAlertType('success')
@@ -107,7 +107,7 @@ const Category = () => {
             is_trending: trending,
         };
         try {
-            const response = await axios.put(`http://ean.gocoolcare.com/category/edit/${editingCategoryId}`, updatedCategoryData);
+            const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/category/edit/${editingCategoryId}`, updatedCategoryData);
             if (response.status === 200) {
                 handleCloseModal();
                 setAlertMessage('Category updated successfully!');
@@ -129,7 +129,7 @@ const Category = () => {
 
     const deleteData = async (id) => {
         try {
-            await axios.delete(`http://ean.gocoolcare.com/category/delete/${id}`);
+            await axios.delete(`${process.env.REACT_APP_BASE_URL}/category/delete/${id}`);
             setAlertMessage('Category deleted successfully')
             setAlertType('success')
             setShowAlert(true);

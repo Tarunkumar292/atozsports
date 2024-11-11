@@ -77,11 +77,11 @@ const Addnews = () => {
         try {
             let response;
             if (editMode) {
-                response = await axios.put(`http://ean.gocoolcare.com/news/edit/${id}`, formData, {
+                response = await axios.put(`${process.env.REACT_APP_BASE_URL}/news/edit/${id}`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             } else {
-                response = await axios.post('http://ean.gocoolcare.com/news/add', formData, {
+                response = await axios.post(`${process.env.REACT_APP_BASE_URL}/news/add`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
             }
@@ -107,7 +107,7 @@ const Addnews = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://ean.gocoolcare.com/category/allcategory');
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/category/allcategory`);
                 setCategories(response.data.category);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -122,7 +122,7 @@ const Addnews = () => {
             setEditMode(true);
             const fetchNewsData = async () => {
                 try {
-                    const response = await axios.get(`http://ean.gocoolcare.com/news/getnews/${id}`);
+                    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/news/getnews/${id}`);
                     const news = response.data.news;
                     setTitle(news.title);
                     setSlug(news.slug);

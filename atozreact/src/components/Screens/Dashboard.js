@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   async function getNews() {
     try {
-      const response = await axios.get("http://ean.gocoolcare.com/news/allnews");
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/news/allnews`);
       const sortedNews = response.data.news.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   async function deleteNews(id) {
     try {
-      await axios.delete(`http://ean.gocoolcare.com/news/delete/${id}`);
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/news/delete/${id}`);
       setAlertMessage('News Deleted Successfully')
       setAlertType('success')
       setShowAlert(true)
@@ -45,7 +45,7 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    axios.get('http://ean.gocoolcare.com/category/allcategory')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/category/allcategory`)
       .then((response) => {
         setCategories(response.data.category);
       })

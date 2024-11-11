@@ -10,7 +10,7 @@ const Sidebar = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('http://ean.gocoolcare.com/user/profile', {
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/user/profile`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
