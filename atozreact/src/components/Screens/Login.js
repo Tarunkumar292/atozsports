@@ -16,7 +16,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://atoz.gocoolcare.com/user/login', {
+      const response = await axios.post('http://ean.gocoolcare.com/user/login', {
         email,
         password
       });
