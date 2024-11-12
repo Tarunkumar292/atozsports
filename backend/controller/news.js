@@ -10,7 +10,7 @@ const addnews = async (req, res) => {
             return res.status(400).json({ message: "Image file is required" });
         }
 
-        const imageUrl = `http://atoz.gocoolcare.com/${file.destination}/${file.filename}`;
+        const imageUrl = `https://ean.gocoolcare.com/${file.destination}/${file.filename}`;
         const newsData = { ...req.body, photo: imageUrl };
 
         const news = new News(newsData);
@@ -61,7 +61,7 @@ const editnews = async (req, res) => {
 
         if (req.file) {
             const file = req.file;
-            const imageUrl = `http://atoz.gocoolcare.com/uploads/${file.filename}`;
+            const imageUrl = `https://ean.gocoolcare.com/uploads/${file.filename}`;
             newsUpdates.photo = imageUrl;
         }
 
