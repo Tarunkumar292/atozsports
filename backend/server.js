@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // Database connection
-const dbURL = process.env.MONGODB_URL || "mongodb+srv://atozsports:abc%40123@cluster0.ahe9u.mongodb.net/"; 
+const dbURL = process.env.MONGODB_URL || "mongodb+srv://testing-dev:Test%21%40%23qwe@testing.wbjvl2r.mongodb.net/myDatabase?retryWrites=true&w=majority&appName=testing"; 
 
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
